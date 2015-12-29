@@ -5,6 +5,8 @@
 
 VIMPROG = ..\\vim
 
+default: nongui
+
 !include Make_all.mak
 
 # Omitted:
@@ -13,6 +15,7 @@ VIMPROG = ..\\vim
 # test12	can't unlink a swap file
 # test25	uses symbolic link
 # test27	can't edit file with "*" in file name
+# test49	fails in various ways
 # test97	\{ and \$ are not escaped characters.
 
 SCRIPTS = $(SCRIPTS_ALL) $(SCRIPTS_MORE1) $(SCRIPTS_MORE3) $(SCRIPTS_MORE4)
