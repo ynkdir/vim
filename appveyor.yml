@@ -67,5 +67,5 @@ deploy:
     draft: false
     prerelease: false
 #   uncomment the following lines, once this is merged to Vim main repository:
-#    on:
-#      appveyor_repo_tag: true
+    on:
+      appveyor_repo_tag: true
