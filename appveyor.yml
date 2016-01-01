@@ -29,6 +29,9 @@ build_script:
   - .\vim --version
 
 after_build:
+  # Create zip packages
+  - copy /Y ..\README.txt ..\runtime
+  - copy /Y ..\vimtutor.bat ..\runtime
   - copy /Y *.exe ..\runtime\
   - copy /Y xxd\*.exe ..\runtime
   - mkdir ..\runtime\GvimExt
@@ -42,6 +45,18 @@ after_build:
   # libwinpthread is needed on Win64 for localizing messages
   - if exist c:\gettext\libwinpthread-1.dll copy /Y c:\gettext\libwinpthread-1.dll ..\runtime\
   - 7z a ..\gvim_%ARCH%.zip ..\runtime\*
+  # Create installers
+  # Build both 64- and 32-bit versions of gvimext.dll for the installer
+  - start /wait cmd /c "setenv /x64 && cd GvimExt && nmake clean all"
+  - move GvimExt\gvimext.dll GvimExt\gvimext64.dll
+  - start /wait cmd /c "setenv /x86 && cd GvimExt && nmake clean all"
+  - c:\cygwin\bin\bash -lc "cd /cygdrive/c/projects/vim/runtime/doc && touch ../../src/auto/config.mk && make uganda.nsis.txt"
+  - copy gvim.exe gvim_ole.exe
+  - copy vim.exe vimw32.exe
+  - copy xxd\xxd.exe xxdw32.exe
+  - copy install.exe installw32.exe
+  - copy uninstal.exe uninstalw32.exe
+  - pushd ..\nsis && c:\nsis-2.50\makensis /DVIMRT=..\runtime gvim.nsi "/XOutFile ..\gvim_%ARCH%.exe" && popd
 
 test_script:
   - cd testdir
@@ -54,6 +69,10 @@ artifacts:
     name: gVim_x86
   - path: gvim_x64.zip
     name: gVim_x64
+  - path: gvim_x86.exe
+    name: gVim_x86_installer
+  - path: gvim_x64.exe
+    name: gVim_x64_installer
 
 deploy:
   - provider: GitHub

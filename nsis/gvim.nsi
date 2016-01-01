@@ -6,13 +6,19 @@
 # because uninstall deletes most files in $0.
 
 # Location of gvim_ole.exe, vimw32.exe, GvimExt/*, etc.
+!ifndef VIMSRC
 !define VIMSRC "..\src"
+!endif
 
 # Location of runtime files
+!ifndef VIMRT
 !define VIMRT ".."
+!endif
 
 # Location of extra tools: diff.exe
+!ifndef VIMTOOLS
 !define VIMTOOLS ..\..
+!endif
 
 # Comment the next line if you don't have UPX.
 # Get it at http://upx.sourceforge.net
@@ -33,9 +39,10 @@
 Name "Vim ${VER_MAJOR}.${VER_MINOR}"
 OutFile gvim${VER_MAJOR}${VER_MINOR}.exe
 CRCCheck force
-SetCompressor lzma
+SetCompressor /SOLID lzma
 SetDatablockOptimize on
 RequestExecutionLevel highest
+XPStyle on
 
 ComponentText "This will install Vim ${VER_MAJOR}.${VER_MINOR} on your computer."
 DirText "Choose a directory to install Vim (should contain 'vim')"
@@ -55,9 +62,6 @@ LicenseData ${VIMRT}\doc\uganda.nsis.txt
 !ifdef HAVE_UPX
   !packhdr temp.dat "upx --best --compress-icons=1 temp.dat"
 !endif
-
-SetCompressor /SOLID lzma
-XPStyle on
 
 # This adds '\vim' to the user choice automagically.  The actual value is
 # obtained below with ReadINIStr.
@@ -357,6 +361,8 @@ SectionEnd
 		File ${VIMRT}\keymap\*.vim
 		SetOutPath $0
 		File ${VIMRT}\libintl.dll
+		File ${VIMRT}\libiconv-2.dll
+		File /nonfatal ${VIMRT}\libwinpthread-1.dll
 	SectionEnd
 !endif
 
