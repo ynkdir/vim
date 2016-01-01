@@ -45,9 +45,11 @@ curl -f -L -O ftp://ftp.vim.org/pub/vim/pc/gvim74.exe
 curl -f -L "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.6-v1.14/gettext0.19.6-iconv1.14-shared-32.exe" -o gettext.exe
 start /wait gettext.exe /verysilent /dir=c:\gettext
 copy c:\gettext\libintl-8.dll c:\gettext\libintl.dll
-:: Install NSIS
+:: Install NSIS and UPX
 curl -f -L -O http://downloads.sourceforge.net/project/nsis/NSIS%%202/2.50/nsis-2.50.zip
 7z x nsis-2.50.zip -oc:\ > nul
+curl -f -L http://upx.sourceforge.net/download/upx391w.zip -o upx.zip
+7z e upx.zip *\upx.exe -onsis > nul
 
 :: Update PATH
 path C:\Perl522\perl\bin;%path%;C:\Lua;C:\Tcl\bin;C:\Ruby22\bin
@@ -91,9 +93,11 @@ start /wait gettext.exe /verysilent /dir=c:\gettext
 copy c:\gettext\libintl-8.dll c:\gettext\libintl.dll
 :: libwinpthread is needed on Win64 for localizing messages
 ::copy c:\gettext\libwinpthread-1.dll ..\runtime
-:: Install NSIS
+:: Install NSIS and UPX
 curl -f -L -O http://downloads.sourceforge.net/project/nsis/NSIS%%202/2.50/nsis-2.50.zip
 7z x nsis-2.50.zip -oc:\ > nul
+curl -f -L http://upx.sourceforge.net/download/upx391w.zip -o upx.zip
+7z e upx.zip *\upx.exe -onsis > nul
 
 :: Update PATH
 path C:\Perl522\perl\bin;%path%;C:\Lua;C:\Tcl\bin;C:\Ruby22-x64\bin
