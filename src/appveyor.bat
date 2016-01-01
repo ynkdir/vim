@@ -79,7 +79,6 @@ echo on
 nmake .config.h.time
 popd
 :: Install binary diff.exe and libintl.dll and iconv.dll
-:: TODO: Make this work with 64bit
 curl -f -L -O ftp://ftp.vim.org/pub/vim/pc/gvim74.exe
 7z e gvim74.exe $0\diff.exe -o..
 curl -f -L "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.6-v1.14/gettext0.19.6-iconv1.14-shared-64.exe" -o gettext.exe
