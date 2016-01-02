@@ -1,6 +1,11 @@
 @echo off
 :: Batch file for building/testing Vim on AppVeyor
 
+if /i "%ARCH%.%appveyor_repo_tag%"=="x86.false" (
+  echo Skip this build.
+  exit 0
+)
+
 if /I "%1"=="" (
   set target=build
 ) else (
@@ -52,6 +57,7 @@ curl -f -L http://upx.sourceforge.net/download/upx391w.zip -o upx.zip
 path C:\Perl522\perl\bin;%path%;C:\Lua;C:\Tcl\bin;C:\Ruby22\bin
 @echo off
 goto :eof
+
 
 :install_x64
 :: ----------------------------------------------------------------------
@@ -117,6 +123,7 @@ nmake -f Make_mvc2.mak CPU=i386 ^
 	RUBY_INC="/I $(RUBY)\include /I $(RUBY)\.ext\include\$(RUBY_PLATFORM)" ^
 	WINVER=0x500 ^
 	|| exit 1
+@if /i "%appveyor_repo_tag%"=="false" goto check_executable
 :: Build CUI version
 nmake -f Make_mvc2.mak CPU=i386 ^
 	GUI=no OLE=no DIRECTX=no ^
@@ -135,6 +142,7 @@ nmake -f Make_mvc2.mak CPU=i386 ^
 pushd po
 nmake -f Make_mvc.mak GETTEXT_PATH=C:\cygwin\bin VIMRUNTIME=..\..\runtime install-all || exit 1
 popd
+goto check_executable
 
 @echo off
 goto :eof
@@ -159,6 +167,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	RUBY_INC="/I $(RUBY)\include /I $(RUBY)\.ext\include\$(RUBY_PLATFORM)" ^
 	WINVER=0x500 ^
 	|| exit 1
+@if /i "%appveyor_repo_tag%"=="false" goto check_executable
 :: Build CUI version
 nmake -f Make_mvc2.mak CPU=AMD64 ^
 	GUI=no OLE=no DIRECTX=no ^
@@ -177,6 +186,70 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 pushd po
 nmake -f Make_mvc.mak GETTEXT_PATH=C:\cygwin\bin VIMRUNTIME=..\..\runtime install-all || exit 1
 popd
+goto check_executable
+
+
+:check_executable
+:: ----------------------------------------------------------------------
+.\gvim -silent -register
+.\gvim -u NONE -c "redir @a | ver | 0put a | wq!" ver.txt
+type ver.txt
+if /i "%appveyor_repo_tag%"=="true" (
+  .\vim --version
+)
+@echo off
+goto :eof
+
+
+:package_x86
+:package_x64
+:: ----------------------------------------------------------------------
+if /i "%appveyor_repo_tag%"=="false" goto :eof
+@echo on
+
+:: Build both 64- and 32-bit versions of gvimext.dll for the installer
+start /wait cmd /c "setenv /x64 && cd GvimExt && nmake clean all"
+move GvimExt\gvimext.dll GvimExt\gvimext64.dll
+start /wait cmd /c "setenv /x86 && cd GvimExt && nmake clean all"
+:: Create zip packages
+copy /Y ..\README.txt ..\runtime
+copy /Y ..\vimtutor.bat ..\runtime
+copy /Y *.exe ..\runtime\
+copy /Y xxd\*.exe ..\runtime
+mkdir ..\runtime\GvimExt
+copy /Y GvimExt\gvimext*.dll ..\runtime\GvimExt\
+copy /Y GvimExt\README.txt   ..\runtime\GvimExt\
+copy /Y GvimExt\*.inf        ..\runtime\GvimExt\
+copy /Y GvimExt\*.reg        ..\runtime\GvimExt\
+copy /Y c:\projects\diff.exe ..\runtime\
+copy /Y c:\gettext\libiconv*.dll ..\runtime\
+copy /Y c:\gettext\libintl.dll ..\runtime\
+:: libwinpthread is needed on Win64 for localizing messages
+if exist c:\gettext\libwinpthread-1.dll copy /Y c:\gettext\libwinpthread-1.dll ..\runtime\
+7z a ..\gvim_%ARCH%.zip ..\runtime\*
+:: Create installers
+c:\cygwin\bin\bash -lc "cd /cygdrive/c/projects/vim/runtime/doc && touch ../../src/auto/config.mk && make uganda.nsis.txt"
+copy gvim.exe gvim_ole.exe
+copy vim.exe vimw32.exe
+copy xxd\xxd.exe xxdw32.exe
+copy install.exe installw32.exe
+copy uninstal.exe uninstalw32.exe
+pushd ..\nsis && c:\nsis-2.50\makensis /DVIMRT=..\runtime gvim.nsi "/XOutFile ..\gvim_%ARCH%.exe" && popd
+
+@echo off
+goto :eof
+
+
+:test_x86
+:test_x64
+:: ----------------------------------------------------------------------
+@echo on
+cd testdir
+nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
+if /i "%appveyor_repo_tag%"=="true" (
+  nmake -f Make_dos.mak clean
+  nmake -f Make_dos.mak VIMPROG=..\vim || exit 1
+)
 
 @echo off
 goto :eof

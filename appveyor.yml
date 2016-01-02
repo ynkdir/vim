@@ -23,46 +23,12 @@ before_build:
 build_script:
   - cd src
   - appveyor.bat build
-  - .\gvim -silent -register
-  - .\gvim -u NONE -c "redir @a | ver | 0put a | wq!" ver.txt
-  - type ver.txt
-  - .\vim --version
 
 after_build:
-  # Build both 64- and 32-bit versions of gvimext.dll for the installer
-  - start /wait cmd /c "setenv /x64 && cd GvimExt && nmake clean all"
-  - move GvimExt\gvimext.dll GvimExt\gvimext64.dll
-  - start /wait cmd /c "setenv /x86 && cd GvimExt && nmake clean all"
-  # Create zip packages
-  - copy /Y ..\README.txt ..\runtime
-  - copy /Y ..\vimtutor.bat ..\runtime
-  - copy /Y *.exe ..\runtime\
-  - copy /Y xxd\*.exe ..\runtime
-  - mkdir ..\runtime\GvimExt
-  - copy /Y GvimExt\gvimext*.dll ..\runtime\GvimExt\
-  - copy /Y GvimExt\README.txt   ..\runtime\GvimExt\
-  - copy /Y GvimExt\*.inf        ..\runtime\GvimExt\
-  - copy /Y GvimExt\*.reg        ..\runtime\GvimExt\
-  - copy /Y c:\projects\diff.exe ..\runtime\
-  - copy /Y c:\gettext\libiconv*.dll ..\runtime\
-  - copy /Y c:\gettext\libintl.dll ..\runtime\
-  # libwinpthread is needed on Win64 for localizing messages
-  - if exist c:\gettext\libwinpthread-1.dll copy /Y c:\gettext\libwinpthread-1.dll ..\runtime\
-  - 7z a ..\gvim_%ARCH%.zip ..\runtime\*
-  # Create installers
-  - c:\cygwin\bin\bash -lc "cd /cygdrive/c/projects/vim/runtime/doc && touch ../../src/auto/config.mk && make uganda.nsis.txt"
-  - copy gvim.exe gvim_ole.exe
-  - copy vim.exe vimw32.exe
-  - copy xxd\xxd.exe xxdw32.exe
-  - copy install.exe installw32.exe
-  - copy uninstal.exe uninstalw32.exe
-  - pushd ..\nsis && c:\nsis-2.50\makensis /DVIMRT=..\runtime gvim.nsi "/XOutFile ..\gvim_%ARCH%.exe" && popd
+  - appveyor.bat package
 
 test_script:
-  - cd testdir
-  - nmake -f Make_dos.mak VIMPROG=..\gvim
-  - nmake -f Make_dos.mak clean
-  - nmake -f Make_dos.mak VIMPROG=..\vim
+  - appveyor.bat test
 
 artifacts:
   - path: gvim_x86.zip
