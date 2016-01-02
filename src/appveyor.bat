@@ -155,7 +155,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 DYNAMIC_TCL=yes TCL=C:\Tcl ^
 	RUBY=C:\projects\ruby DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
-	RUBY_INSTALL_NAME=msvcrt-ruby$(RUBY_API_VER) RUBY_PLATFORM=x64-mswin64_100 ^
+	RUBY_INSTALL_NAME=x64-msvcrt-ruby$(RUBY_API_VER) RUBY_PLATFORM=x64-mswin64_100 ^
 	RUBY_INC="/I $(RUBY)\include /I $(RUBY)\.ext\include\$(RUBY_PLATFORM)" ^
 	WINVER=0x500 ^
 	|| exit 1
@@ -169,7 +169,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 DYNAMIC_TCL=yes TCL=C:\Tcl ^
 	RUBY=C:\projects\ruby DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
-	RUBY_INSTALL_NAME=msvcrt-ruby$(RUBY_API_VER) RUBY_PLATFORM=x64-mswin64_100 ^
+	RUBY_INSTALL_NAME=x64-msvcrt-ruby$(RUBY_API_VER) RUBY_PLATFORM=x64-mswin64_100 ^
 	RUBY_INC="/I $(RUBY)\include /I $(RUBY)\.ext\include\$(RUBY_PLATFORM)" ^
 	WINVER=0x500 ^
 	|| exit 1
