@@ -29,16 +29,20 @@ build_script:
   - .\vim --version
 
 after_build:
+  # Build both 64- and 32-bit versions of gvimext.dll for the installer
+  - start /wait cmd /c "setenv /x64 && cd GvimExt && nmake clean all"
+  - move GvimExt\gvimext.dll GvimExt\gvimext64.dll
+  - start /wait cmd /c "setenv /x86 && cd GvimExt && nmake clean all"
   # Create zip packages
   - copy /Y ..\README.txt ..\runtime
   - copy /Y ..\vimtutor.bat ..\runtime
   - copy /Y *.exe ..\runtime\
   - copy /Y xxd\*.exe ..\runtime
   - mkdir ..\runtime\GvimExt
-  - copy /Y GvimExt\gvimext.dll ..\runtime\GvimExt\
-  - copy /Y GvimExt\README.txt  ..\runtime\GvimExt\
-  - copy /Y GvimExt\*.inf       ..\runtime\GvimExt\
-  - copy /Y GvimExt\*.reg       ..\runtime\GvimExt\
+  - copy /Y GvimExt\gvimext*.dll ..\runtime\GvimExt\
+  - copy /Y GvimExt\README.txt   ..\runtime\GvimExt\
+  - copy /Y GvimExt\*.inf        ..\runtime\GvimExt\
+  - copy /Y GvimExt\*.reg        ..\runtime\GvimExt\
   - copy /Y c:\projects\diff.exe ..\runtime\
   - copy /Y c:\gettext\libiconv*.dll ..\runtime\
   - copy /Y c:\gettext\libintl.dll ..\runtime\
@@ -46,10 +50,6 @@ after_build:
   - if exist c:\gettext\libwinpthread-1.dll copy /Y c:\gettext\libwinpthread-1.dll ..\runtime\
   - 7z a ..\gvim_%ARCH%.zip ..\runtime\*
   # Create installers
-  # Build both 64- and 32-bit versions of gvimext.dll for the installer
-  - start /wait cmd /c "setenv /x64 && cd GvimExt && nmake clean all"
-  - move GvimExt\gvimext.dll GvimExt\gvimext64.dll
-  - start /wait cmd /c "setenv /x86 && cd GvimExt && nmake clean all"
   - c:\cygwin\bin\bash -lc "cd /cygdrive/c/projects/vim/runtime/doc && touch ../../src/auto/config.mk && make uganda.nsis.txt"
   - copy gvim.exe gvim_ole.exe
   - copy vim.exe vimw32.exe
