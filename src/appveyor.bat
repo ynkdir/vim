@@ -41,6 +41,9 @@ call win32\configure.bat
 echo on
 nmake .config.h.time
 popd
+
+if /i "%appveyor_repo_tag%"=="false" goto skip_install_x86
+
 :: Install binary diff.exe and libintl.dll and iconv.dll
 curl -f -L -O ftp://ftp.vim.org/pub/vim/pc/gvim74.exe
 7z e gvim74.exe $0\diff.exe -o..
@@ -52,6 +55,8 @@ curl -f -L -O http://downloads.sourceforge.net/project/nsis/NSIS%%202/2.50/nsis-
 7z x nsis-2.50.zip -oc:\ > nul
 curl -f -L http://upx.sourceforge.net/download/upx391w.zip -o upx.zip
 7z e upx.zip *\upx.exe -onsis > nul
+
+:skip_install_x86
 
 :: Update PATH
 path C:\Perl522\perl\bin;%path%;C:\Lua;C:\Tcl\bin;C:\Ruby22\bin
@@ -84,6 +89,9 @@ call win32\configure.bat
 echo on
 nmake .config.h.time
 popd
+
+if /i "%appveyor_repo_tag%"=="false" goto skip_install_x64
+
 :: Install binary diff.exe and libintl.dll and iconv.dll
 curl -f -L -O ftp://ftp.vim.org/pub/vim/pc/gvim74.exe
 7z e gvim74.exe $0\diff.exe -o..
@@ -97,6 +105,8 @@ curl -f -L -O http://downloads.sourceforge.net/project/nsis/NSIS%%202/2.50/nsis-
 7z x nsis-2.50.zip -oc:\ > nul
 curl -f -L http://upx.sourceforge.net/download/upx391w.zip -o upx.zip
 7z e upx.zip *\upx.exe -onsis > nul
+
+:skip_install_x64
 
 :: Update PATH
 path C:\Perl522\perl\bin;%path%;C:\Lua;C:\Tcl\bin;C:\Ruby22-x64\bin
