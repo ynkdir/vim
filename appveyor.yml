@@ -42,7 +42,7 @@ artifacts:
 
 deploy:
   - provider: GitHub
-    release: vim-$(APPVEYOR_REPO_COMMIT)
+    #release: vim-$(APPVEYOR_REPO_COMMIT)
     # uncomment next lines, when this is merged to Vim mainline
     #release: vim-$(APPVEYOR_REPO_TAG_NAME)
     description: 'Nightly Vim Windows build snapshots'
