@@ -237,7 +237,9 @@ copy /Y c:\gettext\libintl.dll ..\runtime\
 :: libwinpthread is needed on Win64 for localizing messages
 if exist c:\gettext\libwinpthread-1.dll copy /Y c:\gettext\libwinpthread-1.dll ..\runtime\
 7z a ..\gvim_%ARCH%.zip ..\runtime\*
-:: Create installers
+
+:: Create x86 installer
+if /i "%ARCH%"=="x64" goto :eof
 c:\cygwin\bin\bash -lc "cd /cygdrive/c/projects/vim/runtime/doc && touch ../../src/auto/config.mk && make uganda.nsis.txt"
 copy gvim.exe gvim_ole.exe
 copy vim.exe vimw32.exe
