@@ -81,7 +81,7 @@ deploy:
     #release: vim-$(APPVEYOR_REPO_TAG_NAME)
     description: 'Nightly Vim Windows build snapshots'
     auth_token:
-      secure: kH0D/3t+1Mc8OChKhe+voKlMO0aMwnlUr64QoZOJC6BaVwy+Us3ZHq9Oo+aBzjYc
+      secure: ZfZRBCokF4rGIlyS0Nmgcn3g30vhz48ZKvIsF4ZGTv5HYVVPvldOtNQt3ZhtVUEl
     artifact: /gVim/
     draft: false
     prerelease: false
