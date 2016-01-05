@@ -42,15 +42,12 @@ artifacts:
 
 deploy:
   - provider: GitHub
-    #release: vim-$(APPVEYOR_REPO_COMMIT)
-    # uncomment next lines, when this is merged to Vim mainline
-    #release: vim-$(APPVEYOR_REPO_TAG_NAME)
     description: 'Nightly Vim Windows build snapshots'
     auth_token:
+      # Update the following key, once this is merged to Vim main repository:
       secure: ZfZRBCokF4rGIlyS0Nmgcn3g30vhz48ZKvIsF4ZGTv5HYVVPvldOtNQt3ZhtVUEl
     artifact: /gVim/
     draft: false
     prerelease: false
-#   uncomment the following lines, once this is merged to Vim main repository:
     on:
       appveyor_repo_tag: true
