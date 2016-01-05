@@ -780,6 +780,7 @@ static void f_winrestview __ARGS((typval_T *argvars, typval_T *rettv));
 static void f_winsaveview __ARGS((typval_T *argvars, typval_T *rettv));
 static void f_winwidth __ARGS((typval_T *argvars, typval_T *rettv));
 static void f_writefile __ARGS((typval_T *argvars, typval_T *rettv));
+static void f_wordcount __ARGS((typval_T *argvars, typval_T *rettv));
 static void f_xor __ARGS((typval_T *argvars, typval_T *rettv));
 
 static int list2fpos __ARGS((typval_T *arg, pos_T *posp, int *fnump, colnr_T *curswantp));
@@ -3736,24 +3737,27 @@ do_unlet(name, forceit)
     ht = find_var_ht(name, &varname);
     if (ht != NULL && *varname != NUL)
     {
-	if (ht == &globvarht)
-	    d = &globvardict;
-	else if (current_funccal != NULL
-				 && ht == &current_funccal->l_vars.dv_hashtab)
-	    d = &current_funccal->l_vars;
-	else
-	{
-	    di = find_var_in_ht(ht, *name, (char_u *)"", FALSE);
-	    d = di->di_tv.vval.v_dict;
-	}
 	hi = hash_find(ht, varname);
 	if (!HASHITEM_EMPTY(hi))
 	{
 	    di = HI2DI(hi);
 	    if (var_check_fixed(di->di_flags, name, FALSE)
-		    || var_check_ro(di->di_flags, name, FALSE)
-		    || tv_check_lock(d->dv_lock, name, FALSE))
+		    || var_check_ro(di->di_flags, name, FALSE))
 		return FAIL;
+
+	    if (ht == &globvarht)
+		d = &globvardict;
+	    else if (current_funccal != NULL
+				 && ht == &current_funccal->l_vars.dv_hashtab)
+		d = &current_funccal->l_vars;
+	    else
+	    {
+		di = find_var_in_ht(ht, *name, (char_u *)"", FALSE);
+		d = di->di_tv.vval.v_dict;
+	    }
+	    if (d == NULL || tv_check_lock(d->dv_lock, name, FALSE))
+		return FAIL;
+
 	    delete_var(ht, hi);
 	    return OK;
 	}
@@ -8387,6 +8391,7 @@ static struct fst
     {"winrestview",	1, 1, f_winrestview},
     {"winsaveview",	0, 0, f_winsaveview},
     {"winwidth",	1, 1, f_winwidth},
+    {"wordcount",	0, 0, f_wordcount},
     {"writefile",	2, 3, f_writefile},
     {"xor",		2, 2, f_xor},
 };
@@ -20217,6 +20222,19 @@ f_winwidth(argvars, rettv)
 #else
 	rettv->vval.v_number = Columns;
 #endif
+}
+
+/*
+ * "wordcount()" function
+ */
+    static void
+f_wordcount(argvars, rettv)
+    typval_T	*argvars UNUSED;
+    typval_T	*rettv;
+{
+    if (rettv_dict_alloc(rettv) == FAIL)
+	return;
+    cursor_pos_info(rettv->vval.v_dict);
 }
 
 /*
