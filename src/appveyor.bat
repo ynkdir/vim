@@ -40,6 +40,7 @@ pushd ..\ruby
 call win32\configure.bat
 echo on
 nmake .config.h.time
+xcopy /s .ext\include C:\Ruby22\include\ruby-2.2.0
 popd
 
 if /i "%appveyor_repo_tag%"=="false" goto skip_install_x86
@@ -88,6 +89,7 @@ pushd ..\ruby
 call win32\configure.bat
 echo on
 nmake .config.h.time
+xcopy /s .ext\include C:\Ruby22-x64\include\ruby-2.2.0
 popd
 
 if /i "%appveyor_repo_tag%"=="false" goto skip_install_x64
@@ -128,9 +130,8 @@ nmake -f Make_mvc2.mak CPU=i386 ^
 	PYTHON3_VER=34 DYNAMIC_PYTHON3=yes PYTHON3=C:\Python34 ^
 	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
-	RUBY=C:\projects\ruby DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
-	RUBY_INSTALL_NAME=msvcrt-ruby$(RUBY_API_VER) RUBY_PLATFORM=i386-mswin32_100 ^
-	RUBY_INC="/I $(RUBY)\include /I $(RUBY)\.ext\include\$(RUBY_PLATFORM)" ^
+	RUBY=C:\Ruby22 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
+	RUBY_MSVCRT_NAME=msvcrt ^
 	WINVER=0x500 ^
 	|| exit 1
 @if /i "%appveyor_repo_tag%"=="false" goto check_executable
@@ -143,9 +144,8 @@ nmake -f Make_mvc2.mak CPU=i386 ^
 	PYTHON3_VER=34 DYNAMIC_PYTHON3=yes PYTHON3=C:\Python34 ^
 	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
-	RUBY=C:\projects\ruby DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
-	RUBY_INSTALL_NAME=msvcrt-ruby$(RUBY_API_VER) RUBY_PLATFORM=i386-mswin32_100 ^
-	RUBY_INC="/I $(RUBY)\include /I $(RUBY)\.ext\include\$(RUBY_PLATFORM)" ^
+	RUBY=C:\Ruby22 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
+	RUBY_MSVCRT_NAME=msvcrt ^
 	WINVER=0x500 ^
 	|| exit 1
 :: Build translations
@@ -172,9 +172,8 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	PYTHON3_VER=34 DYNAMIC_PYTHON3=yes PYTHON3=C:\Python34-x64 ^
 	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
-	RUBY=C:\projects\ruby DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
-	RUBY_INSTALL_NAME=x64-msvcrt-ruby$(RUBY_API_VER) RUBY_PLATFORM=x64-mswin64_100 ^
-	RUBY_INC="/I $(RUBY)\include /I $(RUBY)\.ext\include\$(RUBY_PLATFORM)" ^
+	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
+	RUBY_MSVCRT_NAME=msvcrt ^
 	WINVER=0x500 ^
 	|| exit 1
 @if /i "%appveyor_repo_tag%"=="false" goto check_executable
@@ -187,9 +186,8 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	PYTHON3_VER=34 DYNAMIC_PYTHON3=yes PYTHON3=C:\Python34-x64 ^
 	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
-	RUBY=C:\projects\ruby DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
-	RUBY_INSTALL_NAME=x64-msvcrt-ruby$(RUBY_API_VER) RUBY_PLATFORM=x64-mswin64_100 ^
-	RUBY_INC="/I $(RUBY)\include /I $(RUBY)\.ext\include\$(RUBY_PLATFORM)" ^
+	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
+	RUBY_MSVCRT_NAME=msvcrt ^
 	WINVER=0x500 ^
 	|| exit 1
 :: Build translations
