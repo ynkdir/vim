@@ -8,8 +8,8 @@ if /i "%ARCH%.%appveyor_repo_tag%"=="x86.false" (
 if /i "%appveyor_repo_tag%"=="true" (
   py -3 "%APPVEYOR_BUILD_FOLDER%\src\check-gh-release.py"
   if errorlevel 1 (
-    echo Skip this build.
-    exit 0
+    echo Skip this build because one day has not been past since the last release.
+    exit 1
   )
 )
 
