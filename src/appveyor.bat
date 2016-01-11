@@ -9,7 +9,8 @@ if /i "%appveyor_repo_tag%"=="true" (
   py -3 "%APPVEYOR_BUILD_FOLDER%\src\check-gh-release.py"
   if errorlevel 1 (
     echo Skip this build because one day has not been past since the last release.
-    exit 1
+    set build_skip=true
+    exit 0
   )
 )
 
