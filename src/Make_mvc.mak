@@ -796,7 +796,11 @@ MZSCHEME_LIB = $(MZSCHEME)\lib\msvc\libmzgc$(MZSCHEME_VER).lib \
 !endif
 MZSCHEME_OBJ = $(OUTDIR)\if_mzsch.obj
 # increase stack size
+!if "$(CPU)" == "i386"
 MZSCHEME_LIB = $(MZSCHEME_LIB) /STACK:8388608
+!else
+MZSCHEME_LIB = $(MZSCHEME_LIB) /STACK:16777216
+!endif
 !endif
 
 # Perl interface
