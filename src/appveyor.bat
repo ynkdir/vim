@@ -45,7 +45,7 @@ popd
 :: Racket
 :: Need a patch to install gvim with dynamic racket
 :: Patch from Yukihiro Nakadaira https://groups.google.com/d/msg/vim_dev/qg7R7HeGq50/l-R74zATAwAJ
-curl -f -L https://raw.githubusercontent.com/chrisbra/vim-mq-patches/master/fix_mzscheme -o fix_mzscheme.diff
+curl -f -L "https://groups.google.com/group/vim_dev/attach/44cb7b87c79e5/if_mzscheme4.diff?part=0.1&authuser=0" -o fix_mzscheme.diff
 git apply --check fix_mzscheme.diff && git apply fix_mzscheme.diff || exit 1
 curl -f -L https://mirror.racket-lang.org/releases/6.3/installers/racket-minimal-6.3-i386-win32.exe -o racket.exe
 start /wait racket.exe /S
@@ -105,7 +105,7 @@ popd
 :: Racket
 :: Need a patch to install gvim with dynamic racket
 :: Patch from Yukihiro Nakadaira https://groups.google.com/d/msg/vim_dev/qg7R7HeGq50/l-R74zATAwAJ
-curl -f -L https://raw.githubusercontent.com/chrisbra/vim-mq-patches/master/fix_mzscheme -o fix_mzscheme.diff
+curl -f -L "https://groups.google.com/group/vim_dev/attach/44cb7b87c79e5/if_mzscheme4.diff?part=0.1&authuser=0" -o fix_mzscheme.diff
 git apply --check fix_mzscheme.diff && git apply fix_mzscheme.diff || exit 1
 curl -f -L https://mirror.racket-lang.org/releases/6.3/installers/racket-minimal-6.3-x86_64-win32.exe -o racket.exe
 start /wait racket.exe /S
