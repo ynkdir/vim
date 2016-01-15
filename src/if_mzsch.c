@@ -690,7 +690,7 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
     if (hMzSch && (hMzGC || gc_dll == NULL))
 	return OK;
 
-    hMzSch  = hMzGC = vimLoadLib(sch_dll);
+    hMzSch  = vimLoadLib(sch_dll);
     if (!hMzSch)
     {
 	if (verbose)
@@ -707,6 +707,11 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
 		EMSG2(_(e_loadlib), gc_dll);
 	    return FAIL;
 	}
+    }
+    {
+	FILE *__f = fopen("a.log", "w");
+	fprintf(__f, "%d %d\n", hMzSch, hMzGC);
+	fclose(__f);
     }
 
     for (thunk = mzsch_imports; thunk->name; thunk++)
