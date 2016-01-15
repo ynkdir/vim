@@ -1,10 +1,10 @@
 @echo off
 :: Batch file for building/testing Vim on AppVeyor
 
-:: if /i "%ARCH%.%appveyor_repo_tag%"=="x86.false" (
-::   echo Skip this build.
-::   exit 0
-:: )
+if /i "%ARCH%.%appveyor_repo_tag%"=="x86.false" (
+  echo Skip this build.
+  exit 0
+)
 
 if /I "%1"=="" (
   set target=build
