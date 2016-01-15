@@ -974,12 +974,12 @@ mzscheme_main(int argc, char** argv)
 	disabled = TRUE;
 	return vim_main2(argc, argv);
     }
-    return vim_main2(argc, argv);
 #endif
 #ifdef HAVE_TLS_SPACE
     scheme_register_tls_space(&tls_space, 0);
 #endif
 #ifdef TRAMPOLINED_MZVIM_STARTUP
+    return vim_main2(argc, argv);
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
 #else
     return mzscheme_env_main(NULL, argc, argv);
