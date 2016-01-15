@@ -963,7 +963,7 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
 #ifdef DYNAMIC_MZSCHEME
-    dynamic_mzscheme_end();
+    //dynamic_mzscheme_end();
 #endif
 }
 
