@@ -186,43 +186,7 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 ml64 /c dbg_asm.asm
-cl dbg_main.c /I"C:\Program Files\Racket\include" dbg_asm.obj /STACK:8388608
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
-.\dbg_main.exe
+cl dbg_main.c /I"C:\Program Files\Racket\include" dbg_asm.obj
 .\dbg_main.exe
 
 :: Remove progress bar from the build log

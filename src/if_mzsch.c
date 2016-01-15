@@ -976,7 +976,7 @@ mzscheme_main(int argc, char** argv)
     }
 #endif
 #ifdef HAVE_TLS_SPACE
-    scheme_register_tls_space(&tls_space, TlsAlloc());
+    scheme_register_tls_space(&tls_space, 0);
 #endif
 #ifdef TRAMPOLINED_MZVIM_STARTUP
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
