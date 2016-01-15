@@ -403,7 +403,6 @@ static void (*dll_scheme_embedded_load)(intptr_t len, const char *s, int predefi
 static void (*dll_scheme_register_embedded_load)(intptr_t len, const char *s);
 static void (*dll_scheme_set_config_path)(Scheme_Object *p);
 # endif
-static void (*dll_scheme_enable_garbage_collection)(int);
 
 /* arrays are imported directly */
 # define scheme_eof dll_scheme_eof
@@ -673,7 +672,6 @@ static Thunk_Info mzsch_imports[] = {
     {"scheme_register_embedded_load", (void **)&dll_scheme_register_embedded_load},
     {"scheme_set_config_path", (void **)&dll_scheme_set_config_path},
 # endif
-    {"scheme_enable_garbage_collection", (void **)&dll_scheme_enable_garbage_collection},
     {NULL, NULL}};
 
 static HINSTANCE hMzGC = 0;
@@ -966,6 +964,11 @@ static __declspec(thread) void *tls_space;
     int
 mzscheme_main(int argc, char** argv)
 {
+    {
+        FILE *__f = fopen("a.log", "w");
+        fprintf(__f, "xxx: %d\n", sizeof(Thread_Local_Variables));
+        fclose(__f);
+    }
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
@@ -1007,7 +1010,6 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
 # endif
 #endif
 
-    dll_scheme_enable_garbage_collection(0);
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2
      * Passing argc, argv through from mzscheme_main
