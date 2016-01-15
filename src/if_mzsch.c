@@ -980,7 +980,6 @@ mzscheme_main(int argc, char** argv)
 #ifdef HAVE_TLS_SPACE
     scheme_register_tls_space(&tls_space, 0);
 #endif
-    dll_scheme_enable_garbage_collection(0);
 #ifdef TRAMPOLINED_MZVIM_STARTUP
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
 #else
@@ -1008,6 +1007,7 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
 # endif
 #endif
 
+    dll_scheme_enable_garbage_collection(0);
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2
      * Passing argc, argv through from mzscheme_main
