@@ -194,6 +194,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	PERL_VER=522 DYNAMIC_PERL=yes PERL=C:\Perl522\perl ^
 	PYTHON_VER=27 DYNAMIC_PYTHON=yes PYTHON=C:\Python27-x64 ^
 	PYTHON3_VER=34 DYNAMIC_PYTHON3=yes PYTHON3=C:\Python34-x64 ^
+	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
 	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
 	RUBY_MSVCRT_NAME=msvcrt ^
@@ -208,6 +209,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	PERL_VER=522 DYNAMIC_PERL=yes PERL=C:\Perl522\perl ^
 	PYTHON_VER=27 DYNAMIC_PYTHON=yes PYTHON=C:\Python27-x64 ^
 	PYTHON3_VER=34 DYNAMIC_PYTHON3=yes PYTHON3=C:\Python34-x64 ^
+	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
 	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
 	RUBY_MSVCRT_NAME=msvcrt ^
@@ -279,12 +281,6 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 cd testdir
-where longdouble.dll
-where iconv.dll
-where libiconv.dll
-where libiconv-2.dll
-dumpbin /imports "C:\Program Files\Racket\lib\libiconv-2.dll"
-dumpbin /exports "C:\Program Files\Racket\lib\libiconv-2.dll"
 nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
 if /i "%appveyor_repo_tag%"=="true" (
   nmake -f Make_dos.mak clean
