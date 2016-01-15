@@ -964,7 +964,6 @@ static __declspec(thread) void *tls_space;
     int
 mzscheme_main(int argc, char** argv)
 {
-    return vim_main2(argc, argv);
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
@@ -975,6 +974,7 @@ mzscheme_main(int argc, char** argv)
 	disabled = TRUE;
 	return vim_main2(argc, argv);
     }
+    return vim_main2(argc, argv);
 #endif
 #ifdef HAVE_TLS_SPACE
     scheme_register_tls_space(&tls_space, 0);
