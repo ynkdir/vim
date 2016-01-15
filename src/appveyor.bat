@@ -193,7 +193,7 @@ cl dbg_main.c /I"C:\Program Files\Racket\include" dbg_asm.obj
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
 :: Build GUI version
 nmake -f Make_mvc2.mak CPU=AMD64 ^
-	GUI=yes OLE=yes DIRECTX=yes ^
+	GUI=yes OLE=yes DIRECTX=yes XPM=no ^
 	FEATURES=HUGE IME=yes MBYTE=yes ICONV=yes DEBUG=no ^
 	PERL_VER=522 DYNAMIC_PERL=yes PERL=C:\Perl522\perl ^
 	PYTHON_VER=27 DYNAMIC_PYTHON=yes PYTHON=C:\Python27-x64 ^
@@ -206,7 +206,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 @if /i "%appveyor_repo_tag%"=="false" goto check_executable
 :: Build CUI version
 nmake -f Make_mvc2.mak CPU=AMD64 ^
-	GUI=no OLE=no DIRECTX=no ^
+	GUI=no OLE=no DIRECTX=no XPM=no ^
 	FEATURES=HUGE IME=yes MBYTE=yes ICONV=yes DEBUG=no ^
 	PERL_VER=522 DYNAMIC_PERL=yes PERL=C:\Perl522\perl ^
 	PYTHON_VER=27 DYNAMIC_PYTHON=yes PYTHON=C:\Python27-x64 ^
