@@ -965,7 +965,7 @@ static __declspec(thread) void *tls_space;
 mzscheme_main(int argc, char** argv)
 {
     {
-        FILE *__f = fopen("a.log");
+        FILE *__f = fopen("a.log", "w");
         fprintf(__f, "xxx: 1\n");
         fclose(__f);
     }
