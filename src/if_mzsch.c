@@ -968,7 +968,16 @@ mzscheme_end(void)
 }
 
 #if HAVE_TLS_SPACE
+# if defined(_MSC_VER)
 static __declspec(thread) void *tls_space;
+extern intptr_t _tls_index;
+# elif defined(__MINGW32__)
+static __thread void *tls_space;
+extern intptr_t _tls_index;
+# else
+static THREAD_LOCAL void *tls_space;
+static intptr_t _tls_index;
+# endif
 #endif
 
     int
@@ -986,7 +995,7 @@ mzscheme_main(int argc, char** argv)
     }
 #endif
 #ifdef HAVE_TLS_SPACE
-    scheme_register_tls_space(&tls_space, 0);
+    scheme_register_tls_space(&tls_space, _tls_index);
 #endif
 #ifdef TRAMPOLINED_MZVIM_STARTUP
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
