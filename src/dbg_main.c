@@ -25,8 +25,8 @@ static int run(Scheme_Env *e, int argc, char *argv[])
     printf("getgs58() = %p\n", getgs58());
     printf("get_tls_vars_ptr() = %p\n", get_tls_vars_ptr(scheme_tls_delta));
     printf("*get_tls_vars_ptr() = %p\n", *get_tls_vars_ptr(scheme_tls_delta));
-    printf("&tls_space - base[tls_index] = %zd\n", (uintptr_t)&tls_space - (uintptr_t)base[_tls_index]);
-    printf("scheme_tls_delta = %zd\n", scheme_tls_delta);
+    printf("&tls_space - base[tls_index] = %lld\n", (uintptr_t)&tls_space - (uintptr_t)base[_tls_index]);
+    printf("scheme_tls_delta = %lld\n", scheme_tls_delta);
     printf("scheme_get_thread_local_variables() = %p\n", scheme_get_thread_local_variables());
 
     return 0;
