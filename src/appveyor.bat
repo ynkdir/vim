@@ -185,6 +185,11 @@ goto :eof
 :build_x64
 :: ----------------------------------------------------------------------
 @echo on
+lib /DEF:"C:\Program Files\Racket\lib\libracket3m_9z0ds0.def"
+ml64 /c dbg_asm.asm
+cl dbg_main.c /I"C:\Program Files\Racket\include" libracket3m_9z0ds0.lib dbg_asm.obj
+.\dbg_main.exe
+
 :: Remove progress bar from the build log
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
 :: Build GUI version
