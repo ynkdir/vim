@@ -1,5 +1,8 @@
-#include <scheme.h>
+#include <windows.h>
 #include <stdio.h>
+#include <scheme.h>
+
+#define RACKET_DLL "libracket3m_9z0ds0.dll"
 
 extern void **getfs();
 extern void **getgs();
@@ -11,7 +14,18 @@ extern int _tls_index;
 
 static __declspec(thread) void *tls_space;
 
-__declspec(dllimport) uintptr_t scheme_tls_delta;
+uintptr_t *p_scheme_tls_delta;
+void (*p_scheme_register_tls_space)(void *tls_space, int _tls_index);
+int (*p_scheme_main_setup)(int no_auto_statics, Scheme_Env_Main _main, int argc, char **argv);
+void *(*p_scheme_external_get_thread_local_variables)(void);
+
+void load() {
+    HINSTANCE h = LoadLibrary(RACKET_DLL);
+    *(void **)&p_scheme_register_tls_space = (void *)GetProcAddress(h, "scheme_register_tls_space");
+    *(void **)&p_scheme_main_setup = (void *)GetProcAddress(h, "scheme_main_setup");
+    *(void **)&p_scheme_external_get_thread_local_variables = (void *)GetProcAddress(h, "scheme_external_get_thread_local_variables");
+    *(void **)&p_scheme_tls_delta = (void *)GetProcAddress(h, "scheme_tls_delta");
+}
 
 static int run(Scheme_Env *e, int argc, char *argv[])
 {
@@ -23,18 +37,20 @@ static int run(Scheme_Env *e, int argc, char *argv[])
     printf("getgs() = %p\n", getgs());
     //printf("getfs2c() = %p\n", getfs2c());
     printf("getgs58() = %p\n", getgs58());
-    printf("get_tls_vars_ptr() = %p\n", get_tls_vars_ptr(scheme_tls_delta));
-    printf("*get_tls_vars_ptr() = %p\n", *get_tls_vars_ptr(scheme_tls_delta));
+    printf("get_tls_vars_ptr() = %p\n", get_tls_vars_ptr(*p_scheme_tls_delta));
+    printf("*get_tls_vars_ptr() = %p\n", *get_tls_vars_ptr(*p_scheme_tls_delta));
     printf("&tls_space - base[tls_index] = %lld\n", (uintptr_t)&tls_space - (uintptr_t)base[_tls_index]);
-    printf("scheme_tls_delta = %lld\n", scheme_tls_delta);
-    printf("scheme_get_thread_local_variables() = %p\n", scheme_get_thread_local_variables());
+    printf("scheme_tls_delta = %lld\n", *p_scheme_tls_delta);
+    //printf("scheme_get_thread_local_variables() = %p\n", scheme_get_thread_local_variables());
+    printf("scheme_external_get_thread_local_variables() = %p\n", p_scheme_external_get_thread_local_variables());
 
     return 0;
 }
 
 int main(int argc, char *argv[])
 {
-    scheme_register_tls_space(&tls_space, _tls_index);
-    return scheme_main_setup(1, run, argc, argv);
+    load();
+    p_scheme_register_tls_space(&tls_space, _tls_index);
+    return p_scheme_main_setup(1, run, argc, argv);
 }
 
