@@ -958,7 +958,7 @@ mzscheme_end(void)
 }
 
 #if HAVE_TLS_SPACE
-static __declspec(thread) void *tls_space;
+static __declspec(thread) void *tls_space[4000];
 #endif
 
     int
@@ -976,7 +976,7 @@ mzscheme_main(int argc, char** argv)
     }
 #endif
 #ifdef HAVE_TLS_SPACE
-    scheme_register_tls_space(&tls_space, 0);
+    scheme_register_tls_space(&tls_space[10], 0);
 #endif
 #ifdef TRAMPOLINED_MZVIM_STARTUP
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
@@ -1004,11 +1004,6 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
     stack_base = (void *)&dummy;
 # endif
 #endif
-    {
-        FILE *__f = fopen("a.log", "w");
-        fprintf(__f, "xxx: %d %d\n", sizeof(Thread_Local_Variables), &more_constant_stxes - &scheme_current_place_id);
-        fclose(__f);
-    }
 
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2
