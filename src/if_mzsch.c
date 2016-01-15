@@ -674,35 +674,39 @@ static Thunk_Info mzsch_imports[] = {
 # endif
     {NULL, NULL}};
 
-static HINSTANCE hMzGC = 0;
 static HINSTANCE hMzSch = 0;
+static HINSTANCE hMzGC = 0;
 
 static void dynamic_mzscheme_end(void);
 static int mzscheme_runtime_link_init(char *sch_dll, char *gc_dll,
 	int verbose);
 
+/* When using Precise GC, gc_dll is NULL and hMzGC is not used. */
     static int
 mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
 {
     Thunk_Info *thunk = NULL;
 
-    if (hMzGC && hMzSch)
+    if (hMzSch && (hMzGC || gc_dll == NULL))
 	return OK;
+
     hMzSch = vimLoadLib(sch_dll);
-    hMzGC = vimLoadLib(gc_dll);
-
-    if (!hMzGC)
-    {
-	if (verbose)
-	    EMSG2(_(e_loadlib), gc_dll);
-	return FAIL;
-    }
-
     if (!hMzSch)
     {
 	if (verbose)
 	    EMSG2(_(e_loadlib), sch_dll);
 	return FAIL;
+    }
+
+    if (gc_dll != NULL)
+    {
+	hMzGC = vimLoadLib(gc_dll);
+	if (!hMzGC)
+	{
+	    if (verbose)
+		EMSG2(_(e_loadlib), gc_dll);
+	    return FAIL;
+	}
     }
 
     for (thunk = mzsch_imports; thunk->name; thunk++)
@@ -712,8 +716,11 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
 	{
 	    FreeLibrary(hMzSch);
 	    hMzSch = 0;
-	    FreeLibrary(hMzGC);
-	    hMzGC = 0;
+	    if (hMzGC)
+	    {
+		FreeLibrary(hMzGC);
+		hMzGC = 0;
+	    }
 	    if (verbose)
 		EMSG2(_(e_loadfunc), thunk->name);
 	    return FAIL;
@@ -722,12 +729,15 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
     for (thunk = mzgc_imports; thunk->name; thunk++)
     {
 	if ((*thunk->ptr =
-		    (void *)GetProcAddress(hMzGC, thunk->name)) == NULL)
+		    (void *)GetProcAddress(hMzGC ? hMzGC : hMzSch, thunk->name)) == NULL)
 	{
 	    FreeLibrary(hMzSch);
 	    hMzSch = 0;
-	    FreeLibrary(hMzGC);
-	    hMzGC = 0;
+	    if (hMzGC)
+	    {
+		FreeLibrary(hMzGC);
+		hMzGC = 0;
+	    }
 	    if (verbose)
 		EMSG2(_(e_loadfunc), thunk->name);
 	    return FAIL;
@@ -953,12 +963,21 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
 #ifdef DYNAMIC_MZSCHEME
-    dynamic_mzscheme_end();
+    //dynamic_mzscheme_end();
 #endif
 }
 
 #if HAVE_TLS_SPACE
+# if defined(_MSC_VER)
 static __declspec(thread) void *tls_space;
+extern intptr_t _tls_index;
+# elif defined(__MINGW32__)
+static __thread void *tls_space;
+extern intptr_t _tls_index;
+# else
+static THREAD_LOCAL void *tls_space;
+static intptr_t _tls_index = 0;
+# endif
 #endif
 
     int
@@ -976,7 +995,7 @@ mzscheme_main(int argc, char** argv)
     }
 #endif
 #ifdef HAVE_TLS_SPACE
-    scheme_register_tls_space(&tls_space, 0);
+    scheme_register_tls_space(&tls_space, _tls_index);
 #endif
 #ifdef TRAMPOLINED_MZVIM_STARTUP
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
