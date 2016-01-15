@@ -283,7 +283,8 @@ where longdouble.dll
 where iconv.dll
 where libiconv.dll
 where libiconv-2.dll
-dumpbin /imports C:\Program Files\Racket\lib\libiconv-2.dll
+dumpbin /imports "C:\Program Files\Racket\lib\libiconv-2.dll"
+dumpbin /exports "C:\Program Files\Racket\lib\libiconv-2.dll"
 nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
 if /i "%appveyor_repo_tag%"=="true" (
   nmake -f Make_dos.mak clean
