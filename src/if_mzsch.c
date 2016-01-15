@@ -673,7 +673,7 @@ static Thunk_Info mzsch_imports[] = {
     {"scheme_register_embedded_load", (void **)&dll_scheme_register_embedded_load},
     {"scheme_set_config_path", (void **)&dll_scheme_set_config_path},
 # endif
-    {"scheme_enable_garbage_collection", (void **)&dll_scheme_enable_garbage_collection};
+    {"scheme_enable_garbage_collection", (void **)&dll_scheme_enable_garbage_collection},
     {NULL, NULL}};
 
 static HINSTANCE hMzGC = 0;
