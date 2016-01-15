@@ -964,11 +964,6 @@ static __declspec(thread) void *tls_space;
     int
 mzscheme_main(int argc, char** argv)
 {
-    {
-        FILE *__f = fopen("a.log", "w");
-        fprintf(__f, "xxx: %d\n", sizeof(Thread_Local_Variables));
-        fclose(__f);
-    }
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
@@ -1009,6 +1004,11 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
     stack_base = (void *)&dummy;
 # endif
 #endif
+    {
+        FILE *__f = fopen("a.log", "w");
+        fprintf(__f, "xxx: %d %d\n", sizeof(Thread_Local_Variables), &more_constant_stxes - &scheme_current_place_id);
+        fclose(__f);
+    }
 
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2

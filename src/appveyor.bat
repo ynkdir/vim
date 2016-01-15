@@ -229,7 +229,6 @@ type ver.txt
 if /i "%appveyor_repo_tag%"=="true" (
   .\vim --version
 )
-type a.log
 @echo off
 goto :eof
 
