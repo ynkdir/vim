@@ -681,7 +681,7 @@ static void dynamic_mzscheme_end(void);
 static int mzscheme_runtime_link_init(char *sch_dll, char *gc_dll,
 	int verbose);
 
-/* gc_dll is NULL and hMzGC is not used for Precise GC. */
+/* When using Precise GC, gc_dll is NULL and hMzGC is not used. */
     static int
 mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
 {
