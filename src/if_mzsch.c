@@ -688,8 +688,8 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
 
     if (hMzGC && hMzSch)
 	return OK;
-    hMzSch = vimLoadLib(sch_dll);
-    hMzGC = vimLoadLib(gc_dll);
+    hMzSch  = hMzGC = vimLoadLib(sch_dll);
+    //hMzGC = vimLoadLib(gc_dll);
 
     if (!hMzGC)
     {
@@ -953,12 +953,12 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
 #ifdef DYNAMIC_MZSCHEME
-    dynamic_mzscheme_end();
+    //dynamic_mzscheme_end();
 #endif
 }
 
 #if HAVE_TLS_SPACE
-static __declspec(thread) void *tls_space[4000];
+static __declspec(thread) void *tls_space;
 #endif
 
     int
@@ -976,7 +976,7 @@ mzscheme_main(int argc, char** argv)
     }
 #endif
 #ifdef HAVE_TLS_SPACE
-    scheme_register_tls_space(&tls_space[10], 0);
+    scheme_register_tls_space(&tls_space, 0);
 #endif
 #ifdef TRAMPOLINED_MZVIM_STARTUP
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
