@@ -5,7 +5,6 @@ version: "{build}"
 
 environment:
   matrix:
-    - ARCH: x64
     - ARCH: x86
 
 matrix:
