@@ -976,7 +976,7 @@ static __thread void *tls_space;
 extern intptr_t _tls_index;
 # else
 static THREAD_LOCAL void *tls_space;
-static intptr_t _tls_index;
+static intptr_t _tls_index = 0;
 # endif
 #endif
 
