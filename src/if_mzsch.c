@@ -964,7 +964,7 @@ static __declspec(thread) void *tls_space;
     int
 mzscheme_main(int argc, char** argv)
 {
-    printf("xxx: test\n");
+    exit(5);
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
