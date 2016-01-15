@@ -50,9 +50,7 @@ static int run(Scheme_Env *e, int argc, char *argv[])
 int main(int argc, char *argv[])
 {
     load();
-    Sleep(1000);
     p_scheme_register_tls_space(&tls_space, _tls_index);
-    Sleep(1000);
     return p_scheme_main_setup(1, run, argc, argv);
 }
 
