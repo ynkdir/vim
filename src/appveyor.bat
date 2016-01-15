@@ -281,9 +281,9 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 cd testdir
-nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
-if /i "%appveyor_repo_tag%"=="true" (
-  nmake -f Make_dos.mak clean
+::nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
+::if /i "%appveyor_repo_tag%"=="true" (
+::  nmake -f Make_dos.mak clean
   nmake -f Make_dos.mak VIMPROG=..\vim || exit 1
 )
 
