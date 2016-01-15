@@ -193,8 +193,7 @@ cl dbg_main.c /I"C:\Program Files\Racket\include" dbg_asm.obj
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
 :: Build GUI version
 nmake -f Make_mvc2.mak CPU=AMD64 ^
-	GUI=yes OLE=yes DIRECTX=yes ^
-	FEATURES=HUGE IME=yes MBYTE=yes ICONV=yes DEBUG=no ^
+	GUI=yes  ^
 	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 ^
 	WINVER=0x500 ^
 	|| exit 1
