@@ -185,34 +185,34 @@ goto :eof
 :build_x64
 :: ----------------------------------------------------------------------
 @echo on
-ml64 /c dbg_asm.asm
-cl dbg_main.c /I"C:\Program Files\Racket\include" dbg_asm.obj
-.\dbg_main.exe
-
 :: Remove progress bar from the build log
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
 :: Build GUI version
 nmake -f Make_mvc2.mak CPU=AMD64 ^
-	GUI=yes OLE=yes DIRECTX=yes XPM=no ^
+	GUI=yes OLE=yes DIRECTX=yes ^
 	FEATURES=HUGE IME=yes MBYTE=yes ICONV=yes DEBUG=no ^
 	PERL_VER=522 DYNAMIC_PERL=yes PERL=C:\Perl522\perl ^
 	PYTHON_VER=27 DYNAMIC_PYTHON=yes PYTHON=C:\Python27-x64 ^
 	PYTHON3_VER=34 DYNAMIC_PYTHON3=yes PYTHON3=C:\Python34-x64 ^
 	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
+	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
+	RUBY_MSVCRT_NAME=msvcrt ^
 	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 ^
 	WINVER=0x500 ^
 	|| exit 1
 @if /i "%appveyor_repo_tag%"=="false" goto check_executable
 :: Build CUI version
 nmake -f Make_mvc2.mak CPU=AMD64 ^
-	GUI=no OLE=no DIRECTX=no XPM=no ^
+	GUI=no OLE=no DIRECTX=no ^
 	FEATURES=HUGE IME=yes MBYTE=yes ICONV=yes DEBUG=no ^
 	PERL_VER=522 DYNAMIC_PERL=yes PERL=C:\Perl522\perl ^
 	PYTHON_VER=27 DYNAMIC_PYTHON=yes PYTHON=C:\Python27-x64 ^
 	PYTHON3_VER=34 DYNAMIC_PYTHON3=yes PYTHON3=C:\Python34-x64 ^
 	LUA_VER=53 DYNAMIC_LUA=yes LUA=C:\Lua ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
+	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
+	RUBY_MSVCRT_NAME=msvcrt ^
 	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 ^
 	WINVER=0x500 ^
 	|| exit 1

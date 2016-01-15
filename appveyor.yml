@@ -13,14 +13,11 @@ matrix:
 
 shallow_clone: true
 
-os: Visual Studio 2015
-
 build:
   verbosity: minimal
 
 before_build:
-  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%'
-  - 'set SDK_INCLUDE_DIR=C:\Program Files\Microsoft SDKs\Windows\v7.1\include'
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /%ARCH% /release'
   - src\appveyor.bat install
 
 build_script:
