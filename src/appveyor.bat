@@ -189,7 +189,7 @@ goto :eof
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
 :: Build GUI version
 nmake -f Make_mvc2.mak CPU=AMD64 ^
-	GUI=no OLE=yes DIRECTX=no ^
+	GUI=yes OLE=yes DIRECTX=yes ^
 	FEATURES=HUGE IME=yes MBYTE=yes ICONV=yes DEBUG=no ^
 	PERL_VER=522 DYNAMIC_PERL=yes PERL=C:\Perl522\perl ^
 	PYTHON_VER=27 DYNAMIC_PYTHON=yes PYTHON=C:\Python27-x64 ^
@@ -201,7 +201,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 ^
 	WINVER=0x500 ^
 	|| exit 1
-@if /i "%appveyor_repo_tag%"=="false" goto check_executable
+:: @if /i "%appveyor_repo_tag%"=="false" goto check_executable
 :: Build CUI version
 nmake -f Make_mvc2.mak CPU=AMD64 ^
 	GUI=no OLE=no DIRECTX=no ^
@@ -281,9 +281,9 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 cd testdir
-::nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
-::if /i "%appveyor_repo_tag%"=="true" (
-::  nmake -f Make_dos.mak clean
+:: nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
+:: if /i "%appveyor_repo_tag%"=="true" (
+::   nmake -f Make_dos.mak clean
   nmake -f Make_dos.mak VIMPROG=..\vim || exit 1
 )
 
