@@ -964,6 +964,11 @@ static __declspec(thread) void *tls_space;
     int
 mzscheme_main(int argc, char** argv)
 {
+    {
+        FILE *__f = fopen("a.log");
+        fprintf(__f, "xxx: 1\n");
+        fclose(__f);
+    }
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
@@ -979,6 +984,11 @@ mzscheme_main(int argc, char** argv)
     scheme_register_tls_space(&tls_space, 0);
 #endif
 #ifdef TRAMPOLINED_MZVIM_STARTUP
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: 2\n");
+        fclose(__f);
+    }
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
 #else
     return mzscheme_env_main(NULL, argc, argv);
@@ -1005,11 +1015,21 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
 # endif
 #endif
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: 3\n");
+        fclose(__f);
+    }
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2
      * Passing argc, argv through from mzscheme_main
      */
     vim_main_result = vim_main2(argc, argv);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: 4\n");
+        fclose(__f);
+    }
 #if !defined(TRAMPOLINED_MZVIM_STARTUP) && defined(MZ_PRECISE_GC)
     /* releasing dummy */
     MZ_GC_REG();

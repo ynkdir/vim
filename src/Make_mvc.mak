@@ -456,17 +456,17 @@ NODEFAULTLIB = /nodefaultlib
 !ifdef NODEBUG
 VIM = vim
 !if "$(OPTIMIZE)" == "SPACE"
-#OPTFLAG = /O1
+OPTFLAG = /O1
 !elseif "$(OPTIMIZE)" == "SPEED"
-#OPTFLAG = /O2
+OPTFLAG = /O2
 !else # MAXSPEED
-#OPTFLAG = /Ox
+OPTFLAG = /Ox
 !endif
 
 !if $(MSVC_MAJOR) >= 8
 # Use link time code generation if not worried about size
 !if "$(OPTIMIZE)" != "SPACE"
-#OPTFLAG = $(OPTFLAG) /GL
+OPTFLAG = $(OPTFLAG) /GL
 !endif
 !endif
 
