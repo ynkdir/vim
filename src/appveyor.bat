@@ -226,7 +226,6 @@ goto check_executable
 .\gvim -silent -register
 .\gvim -u NONE -c "redir @a | ver | 0put a | wq!" ver.txt
 type ver.txt
-type a.log
 if /i "%appveyor_repo_tag%"=="true" (
   .\vim --version
 )
@@ -281,7 +280,6 @@ goto :eof
 @echo on
 cd testdir
 nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
-type a.log
 if /i "%appveyor_repo_tag%"=="true" (
   nmake -f Make_dos.mak clean
   nmake -f Make_dos.mak VIMPROG=..\vim || exit 1
