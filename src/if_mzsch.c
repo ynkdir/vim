@@ -982,9 +982,10 @@ mzscheme_end(void)
             continue;
         for (j = 0; j < 20; ++j)
             if (threadids2[i] == threadids1[j])
-                goto NEXT;
+                break;
+        if (threadids2[i] == threadids1[j])
+            continue;
         TerminateThread(OpenThread(THREAD_TERMINATE, FALSE, threadids2[i]), 0);
-NEXT:
     }
 #if 1
 #ifdef DYNAMIC_MZSCHEME
