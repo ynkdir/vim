@@ -262,7 +262,6 @@ static void (**dll_scheme_notify_multithread_ptr)(int on);
 static void *(*dll_GC_malloc)(size_t size_in_bytes);
 static void *(*dll_GC_malloc_atomic)(size_t size_in_bytes);
 static Scheme_Env *(*dll_scheme_basic_env)(void);
-static void (*dll_scheme_free_all)(void);
 static void (*dll_scheme_check_threads)(void);
 static void (*dll_scheme_register_static)(void *ptr, long size);
 static void (*dll_scheme_set_stack_base)(void *base, int no_auto_statics);
@@ -428,7 +427,6 @@ static void (*dll_scheme_set_config_path)(Scheme_Object *p);
 # define scheme_add_global_symbol dll_scheme_add_global_symbol
 # define scheme_apply dll_scheme_apply
 # define scheme_basic_env dll_scheme_basic_env
-# define scheme_free_all dll_scheme_free_all
 # define scheme_builtin_value dll_scheme_builtin_value
 # if MZSCHEME_VERSION_MAJOR >= 299
 #  define scheme_byte_string_to_char_string dll_scheme_byte_string_to_char_string
@@ -567,7 +565,6 @@ static Thunk_Info mzsch_imports[] = {
     {"scheme_add_global_symbol", (void **)&dll_scheme_add_global_symbol},
     {"scheme_apply", (void **)&dll_scheme_apply},
     {"scheme_basic_env", (void **)&dll_scheme_basic_env},
-    {"scheme_free_all", (void **)&dll_scheme_free_all},
 # if MZSCHEME_VERSION_MAJOR >= 299
     {"scheme_byte_string_to_char_string", (void **)&dll_scheme_byte_string_to_char_string},
     {"scheme_make_path", (void **)&dll_scheme_make_path},
@@ -956,8 +953,7 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
     /* We can not unload the DLL.  Racket's thread might be still alive. */
-    scheme_free_all();
-#if 1
+#if 0
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
