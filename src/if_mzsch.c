@@ -954,7 +954,6 @@ mzscheme_end(void)
 {
     /* We can not unload the DLL.  Racket's thread might be still alive. */
 #if 0
-
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
