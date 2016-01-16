@@ -952,12 +952,22 @@ notify_multithread(int on)
     void
 mzscheme_end(void)
 {
+    {
+	FILE *__f = fopen("a.log", "w");
+	fprintf(__f, "xxx: 1\n");
+	fclose(__f);
+    }
     /* We can not unload the DLL before exiting trampolined main() startup. */
-#if 0
+#if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 2\n");
+	fclose(__f);
+    }
 }
 
 #if HAVE_TLS_SPACE
