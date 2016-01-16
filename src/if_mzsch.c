@@ -941,6 +941,11 @@ mzvim_reset_timer(void)
 notify_multithread(int on)
 {
     mz_threads_allow = on;
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "mzsch: notify_multithread: %d\n", on);
+	fclose(__f);
+    }
 #ifdef MZSCHEME_GUI_THREADS
     if (on && timer_id == 0 && p_mzq > 0 && gui.in_use)
 	setup_timer();
