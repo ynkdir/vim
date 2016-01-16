@@ -978,13 +978,13 @@ mzscheme_end(void)
     int i, j;
     /* We can not unload the DLL.  Racket's thread might be still alive. */
     for (i = 0; i < 20; ++i) {
-LOOP1:
         if (threadids2[i] == 0)
             continue;
         for (j = 0; j < 20; ++j)
             if (threadids2[i] == threadids1[j])
-                goto LOOP1;
+                goto NEXT;
         TerminateThread(OpenThread(THREAD_TERMINATE, FALSE, threadids2[i]), 0);
+NEXT:
     }
 #if 1
 #ifdef DYNAMIC_MZSCHEME
