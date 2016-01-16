@@ -949,11 +949,43 @@ notify_multithread(int on)
 #endif
 }
 
+#include <tlhelp32.h>
+
+static DWORD threadids1[20];
+static DWORD threadids2[20];
+
+static void get_thread_list(DWORD *p)
+{
+    DWORD dwOwnerPID;
+    HANDLE hThreadSnap;
+    THREADENTRY32 te32;
+    int n = 0;
+
+    dwOwnerPID = GetCurrentProcessId();
+    hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    te32.dwSize = sizeof(THREADENTRY32);
+    Thread32First(hThreadSnap, &te32);
+    do {
+        if (te32.th32OwnerProcessID == dwOwnerPID)
+            p[n++] = te32.th32ThreadID;
+    } while (Thread32Next(hThreadSnap, &te32));
+    CloseHandle(hThreadSnap);
+}
+
     void
 mzscheme_end(void)
 {
     /* We can not unload the DLL.  Racket's thread might be still alive. */
-#if 0
+    for (int i = 0; i < 20; ++i) {
+LOOP1:
+        if (threadids2[i] == 0)
+            continue;
+        for (int j = 0; j < 20; ++j)
+            if (threadids2[i] == threadids1[j])
+                goto LOOP1;
+        TerminateThread(threadids2[i], 0);
+    }
+#if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
@@ -976,6 +1008,7 @@ static intptr_t _tls_index = 0;
     int
 mzscheme_main(int argc, char** argv)
 {
+    get_thread_list(threadids1);
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
@@ -1017,6 +1050,7 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
 # endif
 #endif
 
+    get_thread_list(threadids2);
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2
      * Passing argc, argv through from mzscheme_main
