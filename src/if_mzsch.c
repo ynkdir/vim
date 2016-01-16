@@ -1055,6 +1055,7 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
     stack_base = (void *)&dummy;
 # endif
 #endif
+
     {
         FILE *__f = fopen("a.log", "a");
         fprintf(__f, "count_thread = %d\n", __count_thread());
