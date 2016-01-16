@@ -198,7 +198,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
 	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
 	RUBY_MSVCRT_NAME=msvcrt ^
-	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 ^
+	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 MZSCHEME_DEBUG=yes ^
 	WINVER=0x500 ^
 	|| exit 1
 @if /i "%appveyor_repo_tag%"=="false" goto check_executable
@@ -213,7 +213,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
 	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
 	RUBY_MSVCRT_NAME=msvcrt ^
-	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 ^
+	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 MZSCHEME_DEBUG=yes ^
 	WINVER=0x500 ^
 	|| exit 1
 :: Build translations
