@@ -2611,7 +2611,7 @@ mch_exit(int r)
     dyn_libintl_end();
 #endif
 
-    _exit(r);
+    exit(r);
 }
 #endif /* !FEAT_GUI_W32 */
 

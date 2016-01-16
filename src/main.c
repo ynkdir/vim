@@ -1520,6 +1520,7 @@ getout(exitval)
 #ifdef FEAT_CSCOPE
     cs_end();
 #endif
+    exit(exitval);
 #ifdef FEAT_EVAL
     if (garbage_collect_at_exit)
 	garbage_collect();
