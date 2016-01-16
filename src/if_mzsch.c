@@ -897,11 +897,6 @@ timer_proc(EventLoopTimerRef theTimer UNUSED, void *userData UNUSED)
     static void
 setup_timer(void)
 {
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "settimer\n");
-	fclose(__f);
-    }
 # if defined(FEAT_GUI_W32)
     timer_id = SetTimer(NULL, 0, p_mzq, timer_proc);
 # elif defined(FEAT_GUI_GTK)
@@ -946,11 +941,6 @@ mzvim_reset_timer(void)
 notify_multithread(int on)
 {
     mz_threads_allow = on;
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "mzsch: notify_multithread: %d\n", on);
-	fclose(__f);
-    }
 #ifdef MZSCHEME_GUI_THREADS
     if (on && timer_id == 0 && p_mzq > 0 && gui.in_use)
 	setup_timer();
@@ -962,22 +952,12 @@ notify_multithread(int on)
     void
 mzscheme_end(void)
 {
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "xxx: 1\n");
-	fclose(__f);
-    }
-    /* We can not unload the DLL before exiting trampolined main() startup. */
-#if 1
+    /* We can not unload the DLL.  Racket's thread might be still alive. */
+#if 0
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
 #endif
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "xxx: 2\n");
-	fclose(__f);
-    }
 }
 
 #if HAVE_TLS_SPACE
@@ -993,34 +973,9 @@ static intptr_t _tls_index = 0;
 # endif
 #endif
 
-#include <tlhelp32.h>
-
-static int __count_thread()
-{
-    DWORD dwOwnerPID;
-    HANDLE hThreadSnap;
-    THREADENTRY32 te32;
-    int n = 0;
-
-    dwOwnerPID = GetCurrentProcessId();
-    hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
-    te32.dwSize = sizeof(THREADENTRY32);
-    Thread32First(hThreadSnap, &te32);
-    do {
-	if (te32.th32OwnerProcessID == dwOwnerPID)
-	    n++;
-    } while (Thread32Next(hThreadSnap, &te32));
-    CloseHandle(hThreadSnap);
-    return n;
-}
     int
 mzscheme_main(int argc, char** argv)
 {
-    {
-        FILE *__f = fopen("a.log", "w");
-        fprintf(__f, "count_thread = %d\n", __count_thread());
-        fclose(__f);
-    }
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
@@ -1061,12 +1016,6 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
     stack_base = (void *)&dummy;
 # endif
 #endif
-
-    {
-        FILE *__f = fopen("a.log", "a");
-        fprintf(__f, "count_thread = %d\n", __count_thread());
-        fclose(__f);
-    }
 
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2

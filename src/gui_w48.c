@@ -3076,85 +3076,30 @@ gui_mch_insert_lines(
     void
 gui_mch_exit(int rc)
 {
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 1\n");
-	fclose(__f);
-    }
 #if defined(FEAT_DIRECTX)
     DWriteContext_Close(s_dwc);
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 2\n");
-	fclose(__f);
-    }
     DWrite_Final();
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 3\n");
-	fclose(__f);
-    }
     s_dwc = NULL;
 #endif
 
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 4\n");
-	fclose(__f);
-    }
     ReleaseDC(s_textArea, s_hdc);
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 5\n");
-	fclose(__f);
-    }
     DeleteObject(s_brush);
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 6\n");
-	fclose(__f);
-    }
 
 #ifdef FEAT_TEAROFF
     /* Unload the tearoff bitmap */
     (void)DeleteObject((HGDIOBJ)s_htearbitmap);
 #endif
 
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 7\n");
-	fclose(__f);
-    }
     /* Destroy our window (if we have one). */
     if (s_hwnd != NULL)
     {
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 8\n");
-	fclose(__f);
-    }
 	destroying = TRUE;	/* ignore WM_DESTROY message now */
 	DestroyWindow(s_hwnd);
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 9\n");
-	fclose(__f);
-    }
     }
 
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 10\n");
-	fclose(__f);
-    }
 #ifdef GLOBAL_IME
     global_ime_end();
 #endif
-    {
-	FILE *__f = fopen("a.log", "a");
-	fprintf(__f, "gui: 11\n");
-	fclose(__f);
-    }
 }
 
     static char_u *
