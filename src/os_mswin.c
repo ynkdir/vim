@@ -249,7 +249,7 @@ mch_exit(int r)
     free_all_mem();
 #endif
 
-    exit(r);
+    _exit(r);
 }
 
 #endif /* FEAT_GUI_MSWIN */
