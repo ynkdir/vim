@@ -952,6 +952,11 @@ notify_multithread(int on)
     void
 mzscheme_end(void)
 {
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 3\n");
+	fclose(__f);
+    }
     /* We can not unload the DLL before exiting trampolined main() startup. */
 #if 0
 #ifdef DYNAMIC_MZSCHEME
@@ -991,6 +996,11 @@ mzscheme_main(int argc, char** argv)
     scheme_register_tls_space(&tls_space, _tls_index);
 #endif
 #ifdef TRAMPOLINED_MZVIM_STARTUP
+    {
+	FILE *__f = fopen("a.log", "w");
+	fprintf(__f, "xxx: 1\n");
+	fclose(__f);
+    }
     return scheme_main_setup(TRUE, mzscheme_env_main, argc, argv);
 #else
     return mzscheme_env_main(NULL, argc, argv);
@@ -1021,7 +1031,17 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
      * We trampoline into vim_main2
      * Passing argc, argv through from mzscheme_main
      */
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 2\n");
+	fclose(__f);
+    }
     vim_main_result = vim_main2(argc, argv);
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 4\n");
+	fclose(__f);
+    }
 #if !defined(TRAMPOLINED_MZVIM_STARTUP) && defined(MZ_PRECISE_GC)
     /* releasing dummy */
     MZ_GC_REG();
