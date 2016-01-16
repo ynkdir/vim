@@ -975,15 +975,16 @@ static void get_thread_list(DWORD *p)
     void
 mzscheme_end(void)
 {
+    int i, j;
     /* We can not unload the DLL.  Racket's thread might be still alive. */
-    for (int i = 0; i < 20; ++i) {
+    for (i = 0; i < 20; ++i) {
 LOOP1:
         if (threadids2[i] == 0)
             continue;
-        for (int j = 0; j < 20; ++j)
+        for (j = 0; j < 20; ++j)
             if (threadids2[i] == threadids1[j])
                 goto LOOP1;
-        TerminateThread(threadids2[i], 0);
+        TerminateThread(OpenThread(THREAD_TERMINATE, FALSE, threadids2[i]), 0);
     }
 #if 1
 #ifdef DYNAMIC_MZSCHEME
