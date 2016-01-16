@@ -897,6 +897,11 @@ timer_proc(EventLoopTimerRef theTimer UNUSED, void *userData UNUSED)
     static void
 setup_timer(void)
 {
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "settimer\n");
+	fclose(__f);
+    }
 # if defined(FEAT_GUI_W32)
     timer_id = SetTimer(NULL, 0, p_mzq, timer_proc);
 # elif defined(FEAT_GUI_GTK)
