@@ -953,7 +953,8 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
     /* We can not unload the DLL.  Racket's thread might be still alive. */
-#if 0
+    scheme_free_all();
+#if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
