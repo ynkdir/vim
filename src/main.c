@@ -1496,6 +1496,7 @@ getout(exitval)
 #ifdef FEAT_MZSCHEME
     mzscheme_end();
 #endif
+    _exit(exitval);
 #ifdef FEAT_TCL
     tcl_end();
 #endif
