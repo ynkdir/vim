@@ -988,9 +988,33 @@ static intptr_t _tls_index = 0;
 # endif
 #endif
 
+#include <tlhelp32.h>
+
+static int __count_thread()
+{
+    DWORD dwOwnerPID;
+    HANDLE hThreadSnap;
+    THREADENTRY32 te32;
+    int n = 0;
+
+    dwOwnerPID = GetCurrentProcessId();
+    hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    te32.dwSize = sizeof(THREADENTRY32);
+    Thread32First(hThreadSnap, &te32);
+    do {
+        n++;
+    } while (Thread32Next(hThreadSnap, &te32));
+    CloseHandle(hThreadSnap);
+    return n;
+}
     int
 mzscheme_main(int argc, char** argv)
 {
+    {
+        FILE *__f = fopen("a.log", "w");
+        fprintf(__f, "count_thread = %d\n", __count_thread());
+        fclose(__f);
+    }
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
@@ -1031,6 +1055,11 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
     stack_base = (void *)&dummy;
 # endif
 #endif
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "count_thread = %d\n", __count_thread());
+        fclose(__f);
+    }
 
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2
