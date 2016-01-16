@@ -674,39 +674,35 @@ static Thunk_Info mzsch_imports[] = {
 # endif
     {NULL, NULL}};
 
-static HINSTANCE hMzSch = 0;
 static HINSTANCE hMzGC = 0;
+static HINSTANCE hMzSch = 0;
 
 static void dynamic_mzscheme_end(void);
 static int mzscheme_runtime_link_init(char *sch_dll, char *gc_dll,
 	int verbose);
 
-/* When using Precise GC, gc_dll is NULL and hMzGC is not used. */
     static int
 mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
 {
     Thunk_Info *thunk = NULL;
 
-    if (hMzSch && (hMzGC || gc_dll == NULL))
+    if (hMzGC && hMzSch)
 	return OK;
-
     hMzSch = vimLoadLib(sch_dll);
+    hMzGC = vimLoadLib(gc_dll);
+
+    if (!hMzGC)
+    {
+	if (verbose)
+	    EMSG2(_(e_loadlib), gc_dll);
+	return FAIL;
+    }
+
     if (!hMzSch)
     {
 	if (verbose)
 	    EMSG2(_(e_loadlib), sch_dll);
 	return FAIL;
-    }
-
-    if (gc_dll != NULL)
-    {
-	hMzGC = vimLoadLib(gc_dll);
-	if (!hMzGC)
-	{
-	    if (verbose)
-		EMSG2(_(e_loadlib), gc_dll);
-	    return FAIL;
-	}
     }
 
     for (thunk = mzsch_imports; thunk->name; thunk++)
@@ -716,11 +712,8 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
 	{
 	    FreeLibrary(hMzSch);
 	    hMzSch = 0;
-	    if (hMzGC)
-	    {
-		FreeLibrary(hMzGC);
-		hMzGC = 0;
-	    }
+	    FreeLibrary(hMzGC);
+	    hMzGC = 0;
 	    if (verbose)
 		EMSG2(_(e_loadfunc), thunk->name);
 	    return FAIL;
@@ -729,15 +722,12 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
     for (thunk = mzgc_imports; thunk->name; thunk++)
     {
 	if ((*thunk->ptr =
-		    (void *)GetProcAddress(hMzGC ? hMzGC : hMzSch, thunk->name)) == NULL)
+		    (void *)GetProcAddress(hMzGC, thunk->name)) == NULL)
 	{
 	    FreeLibrary(hMzSch);
 	    hMzSch = 0;
-	    if (hMzGC)
-	    {
-		FreeLibrary(hMzGC);
-		hMzGC = 0;
-	    }
+	    FreeLibrary(hMzGC);
+	    hMzGC = 0;
 	    if (verbose)
 		EMSG2(_(e_loadfunc), thunk->name);
 	    return FAIL;
@@ -962,8 +952,11 @@ notify_multithread(int on)
     void
 mzscheme_end(void)
 {
+    /* We can not unload the DLL before exiting trampolined main() startup. */
+#if 0
 #ifdef DYNAMIC_MZSCHEME
-    //dynamic_mzscheme_end();
+    dynamic_mzscheme_end();
+#endif
 #endif
 }
 
