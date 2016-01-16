@@ -958,7 +958,7 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
     {
-	FILE *__f = fopen("a.log", "w");
+	FILE *__f = fopen("a.log", "a");
 	fprintf(__f, "xxx: 1\n");
 	fclose(__f);
     }
