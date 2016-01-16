@@ -1002,7 +1002,8 @@ static int __count_thread()
     te32.dwSize = sizeof(THREADENTRY32);
     Thread32First(hThreadSnap, &te32);
     do {
-        n++;
+	if (te32.th32OwnerProcessID == dwOwnerPID)
+	    n++;
     } while (Thread32Next(hThreadSnap, &te32));
     CloseHandle(hThreadSnap);
     return n;
