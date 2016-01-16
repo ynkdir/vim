@@ -953,7 +953,7 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
     /* We can not unload the DLL before exiting trampolined main() startup. */
-#if 0
+#if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
