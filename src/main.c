@@ -1496,37 +1496,92 @@ getout(exitval)
 #ifdef FEAT_MZSCHEME
     mzscheme_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 3\n");
+	fclose(__f);
+    }
 #ifdef FEAT_TCL
     tcl_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 4\n");
+	fclose(__f);
+    }
 #ifdef FEAT_RUBY
     ruby_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 5\n");
+	fclose(__f);
+    }
 #ifdef FEAT_PYTHON
     python_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 6\n");
+	fclose(__f);
+    }
 #ifdef FEAT_PYTHON3
     python3_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 7\n");
+	fclose(__f);
+    }
 #ifdef FEAT_PERL
     perl_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 8\n");
+	fclose(__f);
+    }
 #if defined(USE_ICONV) && defined(DYNAMIC_ICONV)
     iconv_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 9\n");
+	fclose(__f);
+    }
 #ifdef FEAT_NETBEANS_INTG
     netbeans_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 10\n");
+	fclose(__f);
+    }
 #ifdef FEAT_CSCOPE
     cs_end();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 11\n");
+	fclose(__f);
+    }
 #ifdef FEAT_EVAL
     if (garbage_collect_at_exit)
 	garbage_collect();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 12\n");
+	fclose(__f);
+    }
 #if defined(WIN32) && defined(FEAT_MBYTE)
     free_cmd_argsW();
 #endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 13\n");
+	fclose(__f);
+    }
 
     mch_exit(exitval);
 }

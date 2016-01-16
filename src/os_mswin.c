@@ -224,13 +224,33 @@ int _stricoll(char *a, char *b)
     void
 mch_exit(int r)
 {
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 14\n");
+	fclose(__f);
+    }
     display_errors();
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 15\n");
+	fclose(__f);
+    }
 
     ml_close_all(TRUE);		/* remove all memfiles */
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 16\n");
+	fclose(__f);
+    }
 
 # ifdef FEAT_OLE
     UninitOLE();
 # endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 17\n");
+	fclose(__f);
+    }
 # ifdef FEAT_NETBEANS_INTG
     if (WSInitialized)
     {
@@ -238,17 +258,37 @@ mch_exit(int r)
 	WSACleanup();
     }
 # endif
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 18\n");
+	fclose(__f);
+    }
 #ifdef DYNAMIC_GETTEXT
     dyn_libintl_end();
 #endif
 
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 19\n");
+	fclose(__f);
+    }
     if (gui.in_use)
 	gui_exit(r);
 
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 20\n");
+	fclose(__f);
+    }
 #ifdef EXITFREE
     free_all_mem();
 #endif
 
+    {
+	FILE *__f = fopen("a.log", "a");
+	fprintf(__f, "xxx: 21\n");
+	fclose(__f);
+    }
     exit(r);
 }
 
