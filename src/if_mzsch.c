@@ -254,6 +254,7 @@ static Scheme_Object *dll_scheme_null;
 static Scheme_Object *dll_scheme_true;
 
 static Scheme_Thread **dll_scheme_current_thread_ptr;
+static void (*dll_scheme_kill_thread)(Scheme_Thread *p);
 
 static void (**dll_scheme_console_printf_ptr)(char *str, ...);
 static void (**dll_scheme_console_output_ptr)(char *str, OUTPUT_LEN_TYPE len);
@@ -414,6 +415,7 @@ static void (*dll_scheme_set_config_path)(Scheme_Object *p);
 /* pointers are GetProceAddress'ed as pointers to pointer */
 #if !defined(USE_THREAD_LOCAL) && !defined(LINK_EXTENSIONS_BY_TABLE)
 #  define scheme_current_thread (*dll_scheme_current_thread_ptr)
+#  define scheme_kill_thread dll_scheme_kill_thread
 # endif
 # define scheme_console_printf (*dll_scheme_console_printf_ptr)
 # define scheme_console_output (*dll_scheme_console_output_ptr)
@@ -556,6 +558,7 @@ static Thunk_Info mzsch_imports[] = {
     {"scheme_true", (void **)&dll_scheme_true},
 #if !defined(USE_THREAD_LOCAL) && !defined(LINK_EXTENSIONS_BY_TABLE)
     {"scheme_current_thread", (void **)&dll_scheme_current_thread_ptr},
+    {"scheme_kill_thread", (void **)&dll_scheme_kill_thread},
 #endif
     {"scheme_console_printf", (void **)&dll_scheme_console_printf_ptr},
     {"scheme_console_output", (void **)&dll_scheme_console_output_ptr},
@@ -1007,6 +1010,7 @@ mzscheme_end(void)
         fprintf(__f, "xxx: mzscheme_end\n");
         fclose(__f);
     }
+    scheme_kill_thread(scheme_current_thread);
 #if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
