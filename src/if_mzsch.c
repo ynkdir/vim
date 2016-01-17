@@ -1013,7 +1013,7 @@ mzscheme_end(void)
     dynamic_mzscheme_end();
 #endif
 #endif
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 30; ++i)
         Sleep(1000);
     {
         FILE *__f = fopen("a.log", "a");
