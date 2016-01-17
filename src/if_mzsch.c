@@ -686,6 +686,11 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
 {
     Thunk_Info *thunk = NULL;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_runtime_link_init\n");
+        fclose(__f);
+    }
     if (hMzGC && hMzSch)
 	return OK;
     hMzSch = vimLoadLib(sch_dll);
@@ -739,6 +744,11 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
     int
 mzscheme_enabled(int verbose)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_enabled\n");
+        fclose(__f);
+    }
     return mzscheme_runtime_link_init(
 	    DYNAMIC_MZSCH_DLL, DYNAMIC_MZGC_DLL, verbose) == OK;
 }
@@ -746,6 +756,11 @@ mzscheme_enabled(int verbose)
     static void
 dynamic_mzscheme_end(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: dynamic_mzscheme_end\n");
+        fclose(__f);
+    }
     if (hMzSch)
     {
 	FreeLibrary(hMzSch);
@@ -765,6 +780,11 @@ dynamic_mzscheme_end(void)
     static Scheme_Object *
 guaranteed_byte_string_arg(char *proc, int num, int argc, Scheme_Object **argv)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: guaranteed_byte_string_arg\n");
+        fclose(__f);
+    }
     if (SCHEME_BYTE_STRINGP(argv[num]))
     {
 	return argv[num];
@@ -851,6 +871,11 @@ mzvim_check_threads(void)
     /* Last time MzScheme threads were scheduled */
     static time_t mz_last_time = 0;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzvim_check_threads\n");
+        fclose(__f);
+    }
     if (mz_threads_allow && p_mzq > 0)
     {
 	time_t now = time(NULL);
@@ -883,6 +908,11 @@ timer_proc(XtPointer timed_out UNUSED, XtIntervalId *interval_id UNUSED)
 timer_proc(EventLoopTimerRef theTimer UNUSED, void *userData UNUSED)
 # endif
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: timer_proc\n");
+        fclose(__f);
+    }
     scheme_check_threads();
 # if defined(FEAT_GUI_GTK)
     return TRUE; /* continue receiving notifications */
@@ -897,6 +927,11 @@ timer_proc(EventLoopTimerRef theTimer UNUSED, void *userData UNUSED)
     static void
 setup_timer(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: setup_timer\n");
+        fclose(__f);
+    }
 # if defined(FEAT_GUI_W32)
     timer_id = SetTimer(NULL, 0, p_mzq, timer_proc);
 # elif defined(FEAT_GUI_GTK)
@@ -913,6 +948,11 @@ setup_timer(void)
     static void
 remove_timer(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: remove_timer\n");
+        fclose(__f);
+    }
 # if defined(FEAT_GUI_W32)
     KillTimer(NULL, timer_id);
 # elif defined(FEAT_GUI_GTK)
@@ -929,6 +969,11 @@ remove_timer(void)
     void
 mzvim_reset_timer(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzvim_reset_timer\n");
+        fclose(__f);
+    }
     if (timer_id != 0)
 	remove_timer();
     if (mz_threads_allow && p_mzq > 0 && gui.in_use)
@@ -941,6 +986,11 @@ mzvim_reset_timer(void)
 notify_multithread(int on)
 {
     mz_threads_allow = on;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: notify_multithread\n");
+        fclose(__f);
+    }
 #ifdef MZSCHEME_GUI_THREADS
     if (on && timer_id == 0 && p_mzq > 0 && gui.in_use)
 	setup_timer();
@@ -954,7 +1004,7 @@ mzscheme_end(void)
 {
     {
         FILE *__f = fopen("a.log", "a");
-        fprintf(__f, "xxx: 1\n");
+        fprintf(__f, "xxx: mzscheme_end\n");
         fclose(__f);
     }
 #if 1
@@ -962,11 +1012,6 @@ mzscheme_end(void)
     dynamic_mzscheme_end();
 #endif
 #endif
-    {
-        FILE *__f = fopen("a.log", "a");
-        fprintf(__f, "xxx: 2\n");
-        fclose(__f);
-    }
 }
 
 #if HAVE_TLS_SPACE
@@ -987,7 +1032,7 @@ mzscheme_main(int argc, char** argv)
 {
     {
         FILE *__f = fopen("a.log", "w");
-        fprintf(__f, "xxx: 0\n");
+        fprintf(__f, "xxx: mzscheme_main\n");
         fclose(__f);
     }
 #ifdef DYNAMIC_MZSCHEME
@@ -1031,6 +1076,11 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
 # endif
 #endif
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_env_main\n");
+        fclose(__f);
+    }
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2
      * Passing argc, argv through from mzscheme_main
@@ -1061,6 +1111,11 @@ load_base_module_on_error(void *data)
     static int
 startup_mzscheme(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: startup_mzscheme\n");
+        fclose(__f);
+    }
 #ifndef TRAMPOLINED_MZVIM_STARTUP
     scheme_set_stack_base(stack_base, 1);
 #endif
@@ -1291,6 +1346,11 @@ startup_mzscheme(void)
     static int
 mzscheme_init(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_init\n");
+        fclose(__f);
+    }
     if (!initialized)
     {
 #ifdef DYNAMIC_MZSCHEME
@@ -1351,6 +1411,11 @@ eval_with_exn_handling(void *data, Scheme_Closed_Prim *what, Scheme_Object **ret
     MZ_GC_VAR_IN_REG(2, prim);
     MZ_GC_REG();
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: eval_with_exn_handling\n");
+        fclose(__f);
+    }
     prim = scheme_make_closed_prim_w_arity(what, data, "mzvim", 0, 0);
     MZ_GC_CHECK();
     value = _apply_thunk_catch_exceptions(prim, &exn);
@@ -1389,6 +1454,11 @@ eval_with_exn_handling(void *data, Scheme_Closed_Prim *what, Scheme_Object **ret
     static int
 do_mzscheme_command(exarg_T *eap, void *data, Scheme_Closed_Prim *what)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: do_mzscheme_command\n");
+        fclose(__f);
+    }
     if (mzscheme_init())
 	return FAIL;
 
@@ -1404,6 +1474,11 @@ do_mzscheme_command(exarg_T *eap, void *data, Scheme_Closed_Prim *what)
     void
 mzscheme_buffer_free(buf_T *buf)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_buffer_free\n");
+        fclose(__f);
+    }
     if (buf->b_mzscheme_ref)
     {
 	vim_mz_buffer *bp = NULL;
@@ -1430,6 +1505,11 @@ mzscheme_buffer_free(buf_T *buf)
     void
 mzscheme_window_free(win_T *win)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_window_free\n");
+        fclose(__f);
+    }
     if (win->w_mzscheme_ref)
     {
 	vim_mz_window *wp = NULL;
@@ -1457,6 +1537,11 @@ ex_mzscheme(exarg_T *eap)
 {
     char_u	*script;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: ex_mzscheme\n");
+        fclose(__f);
+    }
     script = script_get(eap, eap->arg);
     if (!eap->skip)
     {
@@ -1483,6 +1568,11 @@ do_load(void *data, int noargc UNUSED, Scheme_Object **noargv UNUSED)
     MZ_GC_VAR_IN_REG(1, result);
     MZ_GC_VAR_IN_REG(2, file);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: do_load\n");
+        fclose(__f);
+    }
 
     file = (char *)scheme_malloc_fail_ok(scheme_malloc_atomic, MAXPATHL + 1);
     MZ_GC_CHECK();
@@ -1518,6 +1608,11 @@ ex_mzfile(exarg_T *eap)
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, pinfo.port);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: ex_mzfile\n");
+        fclose(__f);
+    }
 
     pinfo.name = (char *)eap->arg;
     if (do_mzscheme_command(eap, &pinfo, do_load) != OK
@@ -1589,6 +1684,11 @@ extract_exn_message(Scheme_Object *v)
     static Scheme_Object *
 do_eval(void *s, int noargc UNUSED, Scheme_Object **noargv UNUSED)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: do_eval\n");
+        fclose(__f);
+    }
     return scheme_eval_string_all((char *)s, environment, TRUE);
 }
 
@@ -1604,7 +1704,7 @@ do_intrnl_output(char *mesg, int error)
 
     {
         FILE *__f = fopen("a.log", "a");
-        fprintf(__f, "xxx: 3: %s\n", mesg);
+        fprintf(__f, "xxx: do_intrnl_output: %s\n", mesg);
         fclose(__f);
     }
 
@@ -1652,6 +1752,11 @@ do_flush(void)
     char *buff;
     OUTPUT_LEN_TYPE length;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: do_flush\n");
+        fclose(__f);
+    }
     buff = scheme_get_sized_byte_string_output(curerr, &length);
     MZ_GC_CHECK();
     if (length)
@@ -1683,6 +1788,11 @@ vim_command(void *data, int argc, Scheme_Object **argv)
     MZ_GC_REG();
     cmd = GUARANTEED_STRING_ARG(prim->name, 0);
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_command\n");
+        fclose(__f);
+    }
     /* may be use do_cmdline_cmd? */
     do_cmdline(BYTE_STRING_VALUE(cmd), NULL, NULL, DOCMD_NOWAIT|DOCMD_VERBOSE);
     update_screen(VALID);
@@ -1707,6 +1817,11 @@ vim_eval(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
     MZ_GC_REG();
     expr = GUARANTEED_STRING_ARG(prim->name, 0);
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_eval\n");
+        fclose(__f);
+    }
     vim_result = eval_expr(BYTE_STRING_VALUE(expr), NULL);
 
     if (vim_result == NULL)
@@ -1729,6 +1844,11 @@ vim_eval(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
     static Scheme_Object *
 get_range_start(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_range_start\n");
+        fclose(__f);
+    }
     return scheme_make_integer(range_start);
 }
 
@@ -1736,6 +1856,11 @@ get_range_start(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
     static Scheme_Object *
 get_range_end(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_range_end\n");
+        fclose(__f);
+    }
     return scheme_make_integer(range_end);
 }
 
@@ -1743,6 +1868,11 @@ get_range_end(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
     static Scheme_Object *
 mzscheme_beep(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_beep\n");
+        fclose(__f);
+    }
     vim_beep(BO_LANG);
     return scheme_void;
 }
@@ -1768,6 +1898,11 @@ get_option(void *data, int argc, Scheme_Object **argv)
     MZ_GC_VAR_IN_REG(1, name);
     MZ_GC_REG();
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_option\n");
+        fclose(__f);
+    }
     name = GUARANTEED_STRING_ARG(prim->name, 0);
 
     if (argc > 1)
@@ -1840,6 +1975,11 @@ set_option(void *data, int argc, Scheme_Object **argv)
     MZ_GC_VAR_IN_REG(0, cmd);
     MZ_GC_REG();
     cmd = GUARANTEED_STRING_ARG(prim->name, 0);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: set_option\n");
+        fclose(__f);
+    }
 
     if (argc > 1)
     {
@@ -1890,6 +2030,11 @@ set_option(void *data, int argc, Scheme_Object **argv)
     static Scheme_Object *
 get_curr_win(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_curr_win\n");
+        fclose(__f);
+    }
     return (Scheme_Object *)get_vim_curr_window();
 }
 
@@ -1904,6 +2049,11 @@ get_window_count(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED
     for (w = firstwin; w != NULL; w = w->w_next)
 #endif
 	++n;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_window_count\n");
+        fclose(__f);
+    }
     return scheme_make_integer(n);
 }
 
@@ -1916,6 +2066,11 @@ get_window_list(void *data, int argc, Scheme_Object **argv)
     Scheme_Object   *list;
     win_T	    *w = firstwin;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_window_list\n");
+        fclose(__f);
+    }
     buf = get_buffer_arg(prim->name, 0, argc, argv);
     list = scheme_null;
 
@@ -1938,6 +2093,11 @@ window_new(win_T *win)
 
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, self);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: window_new\n");
+        fclose(__f);
+    }
 
     /* We need to handle deletion of windows underneath us.
      * If we add a "w_mzscheme_ref" field to the win_T structure,
@@ -1977,6 +2137,11 @@ get_window_num(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
     Vim_Prim	*prim = (Vim_Prim *)data;
     win_T	*win = get_window_arg(prim->name, 0, argc, argv)->win;
     win_T	*wp;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_window_num\n");
+        fclose(__f);
+    }
 
     for (wp = firstwin; wp != win; wp = wp->w_next)
 #endif
@@ -1992,6 +2157,11 @@ get_window_by_num(void *data, int argc, Scheme_Object **argv)
     Vim_Prim	*prim = (Vim_Prim *)data;
     win_T	*win = firstwin;
     int		fnum;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_window_by_num\n");
+        fclose(__f);
+    }
 
     fnum = SCHEME_INT_VAL(GUARANTEE_INTEGER(prim->name, 0));
     if (fnum < 1)
@@ -2012,6 +2182,11 @@ get_window_buffer(void *data, int argc, Scheme_Object **argv)
 {
     Vim_Prim	    *prim = (Vim_Prim *)data;
     vim_mz_window   *win = get_window_arg(prim->name, 0, argc, argv);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_window_arg\n");
+        fclose(__f);
+    }
 
     return buffer_new(win->win->w_buffer);
 }
@@ -2022,6 +2197,11 @@ get_window_height(void *data, int argc, Scheme_Object **argv)
 {
     Vim_Prim	    *prim = (Vim_Prim *)data;
     vim_mz_window   *win = get_window_arg(prim->name, 0, argc, argv);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_window_arg\n");
+        fclose(__f);
+    }
 
     return scheme_make_integer(win->win->w_height);
 }
@@ -2034,6 +2214,11 @@ set_window_height(void *data, int argc, Scheme_Object **argv)
     vim_mz_window   *win;
     win_T	    *savewin;
     int		    height;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: set_window_height\n");
+        fclose(__f);
+    }
 
     win = get_window_arg(prim->name, 1, argc, argv);
     height = SCHEME_INT_VAL(GUARANTEE_INTEGER(prim->name, 0));
@@ -2058,6 +2243,11 @@ get_window_width(void *data, int argc, Scheme_Object **argv)
 {
     Vim_Prim	    *prim = (Vim_Prim *)data;
     vim_mz_window   *win = get_window_arg(prim->name, 0, argc, argv);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_window_arg\n");
+        fclose(__f);
+    }
 
     return scheme_make_integer(W_WIDTH(win->win));
 }
@@ -2070,6 +2260,11 @@ set_window_width(void *data, int argc, Scheme_Object **argv)
     vim_mz_window   *win;
     win_T	    *savewin;
     int		    width = 0;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: set_window_width\n");
+        fclose(__f);
+    }
 
     win = get_window_arg(prim->name, 1, argc, argv);
     width = SCHEME_INT_VAL(GUARANTEE_INTEGER(prim->name, 0));
@@ -2095,6 +2290,11 @@ get_cursor(void *data, int argc, Scheme_Object **argv)
     Vim_Prim	    *prim = (Vim_Prim *)data;
     vim_mz_window   *win;
     pos_T	    pos;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_cursor\n");
+        fclose(__f);
+    }
 
     win = get_window_arg(prim->name, 0, argc, argv);
     pos = win->win->w_cursor;
@@ -2111,6 +2311,11 @@ set_cursor(void *data, int argc, Scheme_Object **argv)
     long	    lnum = 0;
     long	    col = 0;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: set_cursor\n");
+        fclose(__f);
+    }
 #ifdef HAVE_SANDBOX
     sandbox_check();
 #endif
@@ -2156,6 +2361,11 @@ mzscheme_open_buffer(void *data, int argc, Scheme_Object **argv)
     MZ_GC_VAR_IN_REG(2, fname);
     MZ_GC_REG();
     fname = GUARANTEED_STRING_ARG(prim->name, 0);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_open_buffer\n");
+        fclose(__f);
+    }
 
 #ifdef HAVE_SANDBOX
     sandbox_check();
@@ -2180,6 +2390,11 @@ get_buffer_by_num(void *data, int argc, Scheme_Object **argv)
     buf_T	*buf;
     int		fnum;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_by_num\n");
+        fclose(__f);
+    }
     fnum = SCHEME_INT_VAL(GUARANTEE_INTEGER(prim->name, 0));
 
     for (buf = firstbuf; buf; buf = buf->b_next)
@@ -2204,6 +2419,11 @@ get_buffer_by_name(void *data, int argc, Scheme_Object **argv)
     MZ_GC_REG();
     fname = GUARANTEED_STRING_ARG(prim->name, 0);
     buffer = scheme_false;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_by_name\n");
+        fclose(__f);
+    }
 
     for (buf = firstbuf; buf; buf = buf->b_next)
     {
@@ -2232,6 +2452,11 @@ get_next_buffer(void *data, int argc, Scheme_Object **argv)
     Vim_Prim	*prim = (Vim_Prim *)data;
     buf_T	*buf = get_buffer_arg(prim->name, 0, argc, argv)->buf;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_next_buffer\n");
+        fclose(__f);
+    }
     if (buf->b_next == NULL)
 	return scheme_false;
     else
@@ -2245,6 +2470,11 @@ get_prev_buffer(void *data, int argc, Scheme_Object **argv)
     Vim_Prim	*prim = (Vim_Prim *)data;
     buf_T	*buf = get_buffer_arg(prim->name, 0, argc, argv)->buf;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_prev_buffer\n");
+        fclose(__f);
+    }
     if (buf->b_prev == NULL)
 	return scheme_false;
     else
@@ -2258,6 +2488,11 @@ get_buffer_num(void *data, int argc, Scheme_Object **argv)
     Vim_Prim	    *prim = (Vim_Prim *)data;
     vim_mz_buffer   *buf = get_buffer_arg(prim->name, 0, argc, argv);
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_num\n");
+        fclose(__f);
+    }
     return scheme_make_integer(buf->buf->b_fnum);
 }
 
@@ -2268,6 +2503,11 @@ get_buffer_count(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED
     buf_T   *b;
     int	    n = 0;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_count\n");
+        fclose(__f);
+    }
     for (b = firstbuf; b; b = b->b_next) ++n;
     return scheme_make_integer(n);
 }
@@ -2279,6 +2519,11 @@ get_buffer_name(void *data, int argc, Scheme_Object **argv)
     Vim_Prim	    *prim = (Vim_Prim *)data;
     vim_mz_buffer   *buf = get_buffer_arg(prim->name, 0, argc, argv);
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_name\n");
+        fclose(__f);
+    }
     return scheme_make_byte_string((char *)buf->buf->b_ffname);
 }
 
@@ -2286,6 +2531,11 @@ get_buffer_name(void *data, int argc, Scheme_Object **argv)
     static Scheme_Object *
 get_curr_buffer(void *data UNUSED, int argc UNUSED, Scheme_Object **argv UNUSED)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_curr_buffer\n");
+        fclose(__f);
+    }
     return (Scheme_Object *)get_vim_curr_buffer();
 }
 
@@ -2296,6 +2546,11 @@ buffer_new(buf_T *buf)
 
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, self);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: buffer_new\n");
+        fclose(__f);
+    }
 
     /* We need to handle deletion of buffers underneath us.
      * If we add a "b_mzscheme_ref" field to the buf_T structure,
@@ -2332,6 +2587,11 @@ get_buffer_size(void *data, int argc, Scheme_Object **argv)
 {
     Vim_Prim	    *prim = (Vim_Prim *)data;
     vim_mz_buffer   *buf = get_buffer_arg(prim->name, 0, argc, argv);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_size\n");
+        fclose(__f);
+    }
 
     return scheme_make_integer(buf->buf->b_ml.ml_line_count);
 }
@@ -2351,6 +2611,11 @@ get_buffer_line(void *data, int argc, Scheme_Object **argv)
     int		    linenr;
     char_u	    *line;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_line\n");
+        fclose(__f);
+    }
     buf = get_buffer_arg(prim->name, 1, argc, argv);
     linenr = SCHEME_INT_VAL(GUARANTEE_INTEGER(prim->name, 0));
     line = ml_get_buf(buf->buf, (linenr_T)linenr, FALSE);
@@ -2378,6 +2643,11 @@ get_buffer_line_list(void *data, int argc, Scheme_Object **argv)
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, list);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_line_list\n");
+        fclose(__f);
+    }
 
     buf = get_buffer_arg(prim->name, 2, argc, argv);
     list = scheme_null;
@@ -2441,6 +2711,11 @@ set_buffer_line(void *data, int argc, Scheme_Object **argv)
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, line);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: set_buffer_line\n");
+        fclose(__f);
+    }
 
 #ifdef HAVE_SANDBOX
     sandbox_check();
@@ -2522,6 +2797,11 @@ set_buffer_line(void *data, int argc, Scheme_Object **argv)
 free_array(char **array)
 {
     char **curr = array;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: free_array\n");
+        fclose(__f);
+    }
     while (*curr != NULL)
 	vim_free(*curr++);
     vim_free(array);
@@ -2557,6 +2837,11 @@ set_buffer_line_list(void *data, int argc, Scheme_Object **argv)
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, line_list);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: set_buffer_line_list\n");
+        fclose(__f);
+    }
 
 #ifdef HAVE_SANDBOX
     sandbox_check();
@@ -2746,6 +3031,11 @@ insert_buffer_line_list(void *data, int argc, Scheme_Object **argv)
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, list);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: insert_buffer_line_list\n");
+        fclose(__f);
+    }
 
 #ifdef HAVE_SANDBOX
     sandbox_check();
@@ -2865,6 +3155,11 @@ insert_buffer_line_list(void *data, int argc, Scheme_Object **argv)
     static Scheme_Object *
 vim_bufferp(void *data UNUSED, int argc UNUSED, Scheme_Object **argv)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_bufferp\n");
+        fclose(__f);
+    }
     if (SCHEME_VIMBUFFERP(argv[0]))
 	return scheme_true;
     else
@@ -2875,6 +3170,11 @@ vim_bufferp(void *data UNUSED, int argc UNUSED, Scheme_Object **argv)
     static Scheme_Object *
 vim_windowp(void *data UNUSED, int argc UNUSED, Scheme_Object **argv)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_windowp\n");
+        fclose(__f);
+    }
     if (SCHEME_VIMWINDOWP(argv[0]))
 	return scheme_true;
     else
@@ -2885,6 +3185,11 @@ vim_windowp(void *data UNUSED, int argc UNUSED, Scheme_Object **argv)
     static Scheme_Object *
 vim_buffer_validp(void *data UNUSED, int argc UNUSED, Scheme_Object **argv)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_buffer_validp\n");
+        fclose(__f);
+    }
     if (SCHEME_VIMBUFFERP(argv[0])
 	    && ((vim_mz_buffer *)argv[0])->buf != INVALID_BUFFER_VALUE)
 	return scheme_true;
@@ -2896,6 +3201,11 @@ vim_buffer_validp(void *data UNUSED, int argc UNUSED, Scheme_Object **argv)
     static Scheme_Object *
 vim_window_validp(void *data UNUSED, int argc UNUSED, Scheme_Object **argv)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_window_validp\n");
+        fclose(__f);
+    }
     if (SCHEME_VIMWINDOWP(argv[0])
 	    && ((vim_mz_window *)argv[0])->win != INVALID_WINDOW_VALUE)
 	return scheme_true;
