@@ -3235,6 +3235,11 @@ string_to_line(Scheme_Object *obj)
     OUTPUT_LEN_TYPE	len;
     int		i;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: string_to_line\n");
+        fclose(__f);
+    }
     scheme_str = scheme_display_to_string(obj, &len);
 
     /* Error checking: String must not contain newlines, as we
@@ -3278,6 +3283,11 @@ vim_to_mzscheme(typval_T *vim_value)
     MZ_GC_VAR_IN_REG(0, result);
     MZ_GC_VAR_IN_REG(1, visited);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_to_mzscheme\n");
+        fclose(__f);
+    }
 
     visited = scheme_make_hash_table(SCHEME_hash_ptr);
     MZ_GC_CHECK();
@@ -3298,6 +3308,11 @@ vim_to_mzscheme_impl(typval_T *vim_value, int depth, Scheme_Hash_Table *visited)
     MZ_GC_VAR_IN_REG(0, result);
     MZ_GC_VAR_IN_REG(1, visited);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_to_mzscheme_impl\n");
+        fclose(__f);
+    }
 
     /* Avoid infinite recursion */
     if (depth > 100)
@@ -3436,6 +3451,11 @@ mzscheme_to_vim(Scheme_Object *obj, typval_T *tv)
     MZ_GC_VAR_IN_REG(0, obj);
     MZ_GC_VAR_IN_REG(1, visited);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_to_vim\n");
+        fclose(__f);
+    }
 
     visited = scheme_make_hash_table(SCHEME_hash_ptr);
     MZ_GC_CHECK();
@@ -3462,6 +3482,11 @@ mzscheme_to_vim_impl(Scheme_Object *obj, typval_T *tv, int depth,
     MZ_GC_VAR_IN_REG(0, obj);
     MZ_GC_VAR_IN_REG(1, visited);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_to_vim_impl\n");
+        fclose(__f);
+    }
 
     MZ_GC_CHECK();
     if (depth > 100) /* limit the deepest recursion level */
@@ -3667,6 +3692,11 @@ vim_funcref(void *name, int argc, Scheme_Object **argv)
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, result);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_funcref\n");
+        fclose(__f);
+    }
 
     result = scheme_void;
     if (list == NULL)
@@ -3721,6 +3751,11 @@ do_mzeval(char_u *str, typval_T *rettv)
     MZ_GC_DECL_REG(1);
     MZ_GC_VAR_IN_REG(0, ret);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: do_mzeval\n");
+        fclose(__f);
+    }
 
     if (mzscheme_init())
     {
@@ -3743,6 +3778,11 @@ do_mzeval(char_u *str, typval_T *rettv)
     static int
 vim_error_check(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: vim_error_check\n");
+        fclose(__f);
+    }
     return (got_int || did_emsg);
 }
 
@@ -3762,6 +3802,11 @@ register_vim_exn(void)
     MZ_GC_VAR_IN_REG(1, exn_name);
     MZ_GC_REG();
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: register_vim_exn\n");
+        fclose(__f);
+    }
     exn_name = scheme_intern_symbol("exn:vim");
     MZ_GC_CHECK();
     struct_exn = scheme_builtin_value("struct:exn");
@@ -3821,6 +3866,11 @@ raise_vim_exn(const char *add_info)
     MZ_GC_VAR_IN_REG(4, byte_string);
     MZ_GC_REG();
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: raise_vim_exn\n");
+        fclose(__f);
+    }
     if (add_info != NULL)
     {
 	char		*c_string = NULL;
@@ -3867,6 +3917,11 @@ raise_vim_exn(const char *add_info)
     void
 raise_if_error(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: raise_if_error\n");
+        fclose(__f);
+    }
     if (vim_error_check())
 	raise_vim_exn(NULL);
 }
@@ -3880,6 +3935,11 @@ get_buffer_arg(const char *fname, int argnum, int argc, Scheme_Object **argv)
 {
     vim_mz_buffer *b;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_buffer_arg\n");
+        fclose(__f);
+    }
     if (argc < argnum + 1)
 	return get_vim_curr_buffer();
     if (!SCHEME_VIMBUFFERP(argv[argnum]))
@@ -3898,6 +3958,11 @@ get_window_arg(const char *fname, int argnum, int argc, Scheme_Object **argv)
 {
     vim_mz_window *w;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_window_arg\n");
+        fclose(__f);
+    }
     if (argc < argnum + 1)
 	return get_vim_curr_window();
     w = (vim_mz_window *)argv[argnum];
@@ -3912,6 +3977,11 @@ buf_T *get_valid_buffer(void *obj)
 {
     buf_T *buf = ((vim_mz_buffer *)obj)->buf;
 
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_valid_buffer\n");
+        fclose(__f);
+    }
     if (buf == INVALID_BUFFER_VALUE)
 	scheme_signal_error(_("buffer is invalid"));
     return buf;
@@ -3921,6 +3991,11 @@ buf_T *get_valid_buffer(void *obj)
 win_T *get_valid_window(void *obj)
 {
     win_T *win = ((vim_mz_window *)obj)->win;
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_valid_window\n");
+        fclose(__f);
+    }
     if (win == INVALID_WINDOW_VALUE)
 	scheme_signal_error(_("window is invalid"));
     return win;
@@ -3929,18 +4004,33 @@ win_T *get_valid_window(void *obj)
     int
 mzthreads_allowed(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzthreads_allowed\n");
+        fclose(__f);
+    }
     return mz_threads_allow;
 }
 
     static int
 line_in_range(linenr_T lnum, buf_T *buf)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: line_in_range\n");
+        fclose(__f);
+    }
     return (lnum > 0 && lnum <= buf->b_ml.ml_line_count);
 }
 
     static void
 check_line_range(linenr_T lnum, buf_T *buf)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: check_line_range\n");
+        fclose(__f);
+    }
     if (!line_in_range(lnum, buf))
 	scheme_signal_error(_("linenr out of range"));
 }
@@ -3954,6 +4044,11 @@ check_line_range(linenr_T lnum, buf_T *buf)
     static void
 mz_fix_cursor(int lo, int hi, int extra)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mz_fix_cursor\n");
+        fclose(__f);
+    }
     if (curwin->w_cursor.lnum >= lo)
     {
 	/* Adjust the cursor position if it's in/after the changed
@@ -4035,6 +4130,11 @@ static Vim_Prim prims[]=
     static vim_mz_buffer *
 get_vim_curr_buffer(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_vim_curr_buffer\n");
+        fclose(__f);
+    }
     if (curbuf->b_mzscheme_ref == NULL)
 	return (vim_mz_buffer *)buffer_new(curbuf);
     else
@@ -4045,6 +4145,11 @@ get_vim_curr_buffer(void)
     static vim_mz_window *
 get_vim_curr_window(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: get_vim_curr_window\n");
+        fclose(__f);
+    }
     if (curwin->w_mzscheme_ref == NULL)
 	return (vim_mz_window *)window_new(curwin);
     else
@@ -4064,6 +4169,11 @@ make_modules()
     MZ_GC_VAR_IN_REG(1, vimext_symbol);
     MZ_GC_VAR_IN_REG(2, closed_prim);
     MZ_GC_REG();
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: make_modules\n");
+        fclose(__f);
+    }
 
     vimext_symbol = scheme_intern_symbol("vimext");
     MZ_GC_CHECK();
@@ -4092,6 +4202,11 @@ static Scheme_Object *M_delete = NULL;
     static void
 sandbox_check(void)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: sandbox_check\n");
+        fclose(__f);
+    }
     if (sandbox)
 	raise_vim_exn(_("not allowed in the Vim sandbox"));
 }
@@ -4100,6 +4215,11 @@ sandbox_check(void)
     static Scheme_Object *
 sandbox_file_guard(int argc UNUSED, Scheme_Object **argv)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: sandbox_file_guard\n");
+        fclose(__f);
+    }
     if (sandbox)
     {
 	Scheme_Object *requested_access = argv[2];
@@ -4146,6 +4266,11 @@ sandbox_file_guard(int argc UNUSED, Scheme_Object **argv)
     static Scheme_Object *
 sandbox_network_guard(int argc UNUSED, Scheme_Object **argv UNUSED)
 {
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: sandbox_network_guard\n");
+        fclose(__f);
+    }
     return scheme_void;
 }
 #endif
