@@ -1009,6 +1009,7 @@ mzscheme_end(void)
         fclose(__f);
     }
     LoadLibrary("msvcrt.dll");
+    LoadLibrary("WS2_32.dll");
 #if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
