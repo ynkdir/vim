@@ -415,8 +415,8 @@ static void (*dll_scheme_set_config_path)(Scheme_Object *p);
 /* pointers are GetProceAddress'ed as pointers to pointer */
 #if !defined(USE_THREAD_LOCAL) && !defined(LINK_EXTENSIONS_BY_TABLE)
 #  define scheme_current_thread (*dll_scheme_current_thread_ptr)
-#  define scheme_kill_thread dll_scheme_kill_thread
 # endif
+#  define scheme_kill_thread dll_scheme_kill_thread
 # define scheme_console_printf (*dll_scheme_console_printf_ptr)
 # define scheme_console_output (*dll_scheme_console_output_ptr)
 # define scheme_notify_multithread (*dll_scheme_notify_multithread_ptr)
