@@ -49,6 +49,7 @@ $(TEST_OUTFILES): $(DOSTMP)\$(*B).in
 	copy $(DOSTMP)\$(*B).in $(*B).in
 	copy $(*B).ok test.ok
 	$(VIMPROG) -u dos.vim -U NONE --noplugin -s dotest.in $(*B).in
+	type a.log
 	-@if exist test.out MOVE /y test.out $(DOSTMP)\$(*B).out
 	-@if exist $(*B).in.bak move /y $(*B).in.bak $(*B).in
 	-@if exist test.ok del test.ok
@@ -58,6 +59,7 @@ $(TEST_OUTFILES): $(DOSTMP)\$(*B).in
 	-@if exist viminfo del viminfo
 	$(VIMPROG) -u dos.vim --noplugin "+set ff=unix|f test.out|wq" \
 		$(DOSTMP)\$(*B).out
+	type a.log
 	@diff test.out $*.ok & if errorlevel 1 \
 		( move /y test.out $*.failed \
 		 & del $(DOSTMP)\$(*B).out \
