@@ -949,49 +949,24 @@ notify_multithread(int on)
 #endif
 }
 
-#include <tlhelp32.h>
-
-static DWORD threadids1[20];
-static DWORD threadids2[20];
-
-static void get_thread_list(DWORD *p)
-{
-    DWORD dwOwnerPID;
-    HANDLE hThreadSnap;
-    THREADENTRY32 te32;
-    int n = 0;
-
-    dwOwnerPID = GetCurrentProcessId();
-    hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
-    te32.dwSize = sizeof(THREADENTRY32);
-    Thread32First(hThreadSnap, &te32);
-    do {
-        if (te32.th32OwnerProcessID == dwOwnerPID)
-            p[n++] = te32.th32ThreadID;
-    } while (Thread32Next(hThreadSnap, &te32));
-    CloseHandle(hThreadSnap);
-}
-
     void
 mzscheme_end(void)
 {
-    int i, j;
-    /* We can not unload the DLL.  Racket's thread might be still alive. */
-    for (i = 0; i < 20; ++i) {
-        if (threadids2[i] == 0)
-            continue;
-        for (j = 0; j < 20; ++j)
-            if (threadids2[i] == threadids1[j])
-                break;
-        if (threadids2[i] == threadids1[j])
-            continue;
-        TerminateThread(OpenThread(THREAD_TERMINATE, FALSE, threadids2[i]), 0);
+    {
+        FILE __f = fopen("a.log", "w");
+        fprintf(__f, "xxx: 1\n");
+        fclose(__f);
     }
 #if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
 #endif
+    {
+        FILE __f = fopen("a.log", "a");
+        fprintf(__f, "xxx: 2\n");
+        fclose(__f);
+    }
 }
 
 #if HAVE_TLS_SPACE
@@ -1010,7 +985,6 @@ static intptr_t _tls_index = 0;
     int
 mzscheme_main(int argc, char** argv)
 {
-    get_thread_list(threadids1);
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
@@ -1052,7 +1026,6 @@ mzscheme_env_main(Scheme_Env *env, int argc, char **argv)
 # endif
 #endif
 
-    get_thread_list(threadids2);
     /* mzscheme_main is called as a trampoline from main.
      * We trampoline into vim_main2
      * Passing argc, argv through from mzscheme_main
@@ -1623,6 +1596,12 @@ do_eval(void *s, int noargc UNUSED, Scheme_Object **noargv UNUSED)
 do_intrnl_output(char *mesg, int error)
 {
     char *p, *prev;
+
+    {
+        FILE __f = fopen("a.log", "a");
+        fprintf(__f, "xxx: 3: %s\n", mesg);
+        fclose(__f);
+    }
 
     prev = mesg;
     p = strchr(prev, '\n');
