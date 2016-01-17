@@ -953,7 +953,7 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
     {
-        FILE __f = fopen("a.log", "w");
+        FILE *__f = fopen("a.log", "w");
         fprintf(__f, "xxx: 1\n");
         fclose(__f);
     }
@@ -963,7 +963,7 @@ mzscheme_end(void)
 #endif
 #endif
     {
-        FILE __f = fopen("a.log", "a");
+        FILE *__f = fopen("a.log", "a");
         fprintf(__f, "xxx: 2\n");
         fclose(__f);
     }
@@ -1598,7 +1598,7 @@ do_intrnl_output(char *mesg, int error)
     char *p, *prev;
 
     {
-        FILE __f = fopen("a.log", "a");
+        FILE *__f = fopen("a.log", "a");
         fprintf(__f, "xxx: 3: %s\n", mesg);
         fclose(__f);
     }
