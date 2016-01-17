@@ -953,7 +953,7 @@ notify_multithread(int on)
 mzscheme_end(void)
 {
     {
-        FILE *__f = fopen("a.log", "w");
+        FILE *__f = fopen("a.log", "a");
         fprintf(__f, "xxx: 1\n");
         fclose(__f);
     }
@@ -985,6 +985,11 @@ static intptr_t _tls_index = 0;
     int
 mzscheme_main(int argc, char** argv)
 {
+    {
+        FILE *__f = fopen("a.log", "w");
+        fprintf(__f, "xxx: 0\n");
+        fclose(__f);
+    }
 #ifdef DYNAMIC_MZSCHEME
     /*
      * Racket requires trampolined startup.  We can not load it later.
