@@ -254,7 +254,6 @@ static Scheme_Object *dll_scheme_null;
 static Scheme_Object *dll_scheme_true;
 
 static Scheme_Thread **dll_scheme_current_thread_ptr;
-static void (*dll_scheme_kill_thread)(Scheme_Thread *p);
 
 static void (**dll_scheme_console_printf_ptr)(char *str, ...);
 static void (**dll_scheme_console_output_ptr)(char *str, OUTPUT_LEN_TYPE len);
@@ -416,7 +415,6 @@ static void (*dll_scheme_set_config_path)(Scheme_Object *p);
 #if !defined(USE_THREAD_LOCAL) && !defined(LINK_EXTENSIONS_BY_TABLE)
 #  define scheme_current_thread (*dll_scheme_current_thread_ptr)
 # endif
-#  define scheme_kill_thread dll_scheme_kill_thread
 # define scheme_console_printf (*dll_scheme_console_printf_ptr)
 # define scheme_console_output (*dll_scheme_console_output_ptr)
 # define scheme_notify_multithread (*dll_scheme_notify_multithread_ptr)
@@ -558,7 +556,6 @@ static Thunk_Info mzsch_imports[] = {
     {"scheme_true", (void **)&dll_scheme_true},
 #if !defined(USE_THREAD_LOCAL) && !defined(LINK_EXTENSIONS_BY_TABLE)
     {"scheme_current_thread", (void **)&dll_scheme_current_thread_ptr},
-    {"scheme_kill_thread", (void **)&dll_scheme_kill_thread},
 #endif
     {"scheme_console_printf", (void **)&dll_scheme_console_printf_ptr},
     {"scheme_console_output", (void **)&dll_scheme_console_output_ptr},
@@ -1005,17 +1002,24 @@ notify_multithread(int on)
     void
 mzscheme_end(void)
 {
+    int i;
     {
         FILE *__f = fopen("a.log", "a");
         fprintf(__f, "xxx: mzscheme_end\n");
         fclose(__f);
     }
-    scheme_kill_thread(scheme_current_thread);
 #if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
 #endif
+    for (i = 0; i < 10; ++i)
+        Sleep(1000);
+    {
+        FILE *__f = fopen("a.log", "a");
+        fprintf(__f, "xxx: mzscheme_end: 2\n");
+        fclose(__f);
+    }
 }
 
 #if HAVE_TLS_SPACE
