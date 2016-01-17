@@ -249,11 +249,6 @@ mch_exit(int r)
     free_all_mem();
 #endif
 
-    {
-        FILE *__f = fopen("a.log", "a");
-        fprintf(__f, "xxx: exit\n");
-        fclose(__f);
-    }
     exit(r);
 }
 
