@@ -689,7 +689,7 @@ mzscheme_runtime_link_init(char *sch_dll, char *gc_dll, int verbose)
     if (hMzGC && hMzSch)
 	return OK;
     hMzSch = vimLoadLib(sch_dll);
-    hMzGC = hMzSch; //vimLoadLib(gc_dll);
+    hMzGC = vimLoadLib(gc_dll);
 
     if (!hMzGC)
     {
@@ -753,7 +753,7 @@ dynamic_mzscheme_end(void)
     }
     if (hMzGC)
     {
-	//FreeLibrary(hMzGC);
+	FreeLibrary(hMzGC);
 	hMzGC = 0;
     }
 }
