@@ -1008,13 +1008,12 @@ mzscheme_end(void)
         fprintf(__f, "xxx: mzscheme_end\n");
         fclose(__f);
     }
+    LoadLibrary("msvcrt.dll");
 #if 1
 #ifdef DYNAMIC_MZSCHEME
     dynamic_mzscheme_end();
 #endif
 #endif
-    for (i = 0; i < 30; ++i)
-        Sleep(1000);
     {
         FILE *__f = fopen("a.log", "a");
         fprintf(__f, "xxx: mzscheme_end: 2\n");
