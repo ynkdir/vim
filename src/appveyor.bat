@@ -188,7 +188,7 @@ goto :eof
 
 curl -O https://dl.dropboxusercontent.com/s/nnnktcz2ecd6gl8/dbg.zip
 7z x dbg.zip
-set %PATH%;%CD%\dbg\racket\lib
+set PATH=%PATH%;%CD%\dbg\racket\lib
 pushd dbg\vim\src\testdir
 ..\gvim -u NONE -c "redir @a | ver | echo 'has(mzscheme)' has('mzscheme') | 0put a | wq!" ver.txt
 type ver.txt
