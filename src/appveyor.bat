@@ -191,10 +191,10 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v 
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpCount /t REG_DWORD /d 10 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpType /t REG_DWORD /d 2 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v CustomDumpFlags /t REG_DWORD /d 0 /f
-curl -O https://dl.dropboxusercontent.com/s/nnnktcz2ecd6gl8/dbg.zip
-7z x dbg.zip
-set PATH=%PATH%;%CD%\dbg\racket\lib
-pushd dbg\vim\src\testdir
+curl -O https://dl.dropboxusercontent.com/s/jyp5uji8kq6vey9/dbg3.zip
+7z x dbg3.zip
+set PATH=%PATH%;%CD%\dbg3\racket\lib
+pushd dbg3\vim\src\testdir
 ..\gvim -u NONE -c "redir @a | ver | echo 'has(mzscheme)' has('mzscheme') | 0put a | wq!" ver.txt
 type ver.txt
 nmake -f Make_dos.mak VIMPROG=..\gvim
@@ -300,11 +300,11 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 cd testdir
-nmake /I -f Make_dos.mak VIMPROG=..\gvim || exit 1
-if /i "%appveyor_repo_tag%"=="true" (
-  nmake /I -f Make_dos.mak clean
-  nmake /I -f Make_dos.mak VIMPROG=..\vim || exit 1
-)
+rem nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
+rem if /i "%appveyor_repo_tag%"=="true" (
+rem   nmake -f Make_dos.mak clean
+rem   nmake -f Make_dos.mak VIMPROG=..\vim || exit 1
+rem )
 
 @echo off
 goto :eof
