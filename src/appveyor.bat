@@ -198,9 +198,6 @@ pushd dbg\vim\src\testdir
 ..\gvim -u NONE -c "redir @a | ver | echo 'has(mzscheme)' has('mzscheme') | 0put a | wq!" ver.txt
 type ver.txt
 nmake -f Make_dos.mak VIMPROG=..\gvim
-dir C:\CrashDumps
-7z a -t7z -m0=lzma -mx=9 a.7z C:/CrashDumps
-..\xxd\xxd.exe -p a.7z
 popd
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /va /f
 
@@ -257,6 +254,8 @@ goto :eof
 :package_x86
 :package_x64
 :: ----------------------------------------------------------------------
+7z a -t7z -m0=lzma -mx=9 ../crashdump.7z C:/CrashDumps
+
 if /i "%appveyor_repo_tag%"=="false" goto :eof
 @echo on
 
