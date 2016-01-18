@@ -198,8 +198,10 @@ pushd dbg\vim\src\testdir
 ..\gvim -u NONE -c "redir @a | ver | echo 'has(mzscheme)' has('mzscheme') | 0put a | wq!" ver.txt
 type ver.txt
 nmake -f Make_dos.mak VIMPROG=..\gvim
-popd
 dir C:\CrashDumps
+7z a -t7z -m0=lzma -mx=9 a.7z C:/CrashDumps
+..\xxd\xxd.exe -p a.7z
+popd
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /va /f
 
 :: Remove progress bar from the build log
