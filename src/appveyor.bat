@@ -193,6 +193,12 @@ pushd dbg\vim\src\testdir
 nmake -f Make_dos.mak VIMPROG=..\gvim
 popd
 
+curl -O https://dl.dropboxusercontent.com/s/cxgpk3ovtihj3m5/dbg2.zip
+7z x dbg2.zip
+pushd dbg2\vim\src\testdir
+nmake -f Make_dos.mak VIMPROG=..\gvim
+popd
+
 :: Remove progress bar from the build log
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
 :: Build GUI version
