@@ -44,9 +44,6 @@ xcopy /s .ext\include C:\Ruby22\include\ruby-2.2.0
 popd
 :: Racket
 :: Need a patch to install gvim with dynamic racket
-:: Patch from Yukihiro Nakadaira https://groups.google.com/d/msg/vim_dev/qg7R7HeGq50/XLqqrzZ3BQAJ
-:: curl -f -L "https://groups.google.com/group/vim_dev/attach/57736afaaba5c/if_mzscheme5.diff?part=0.1&authuser=0" -o fix_mzscheme.diff
-:: git apply --check fix_mzscheme.diff && git apply fix_mzscheme.diff || exit 1
 curl -f -L https://mirror.racket-lang.org/releases/6.3/installers/racket-minimal-6.3-i386-win32.exe -o racket.exe
 start /wait racket.exe /S
 
@@ -103,12 +100,12 @@ nmake .config.h.time
 xcopy /s .ext\include C:\Ruby22-x64\include\ruby-2.2.0
 popd
 :: Racket
-:: Need a patch to install gvim with dynamic racket
-:: Patch from Yukihiro Nakadaira https://groups.google.com/d/msg/vim_dev/qg7R7HeGq50/XLqqrzZ3BQAJ
-:: curl -f -L "https://groups.google.com/group/vim_dev/attach/57736afaaba5c/if_mzscheme5.diff?part=0.1&authuser=0" -o fix_mzscheme.diff
-:: git apply --check fix_mzscheme.diff && git apply fix_mzscheme.diff || exit 1
-curl -f -L https://mirror.racket-lang.org/releases/6.3/installers/racket-minimal-6.3-x86_64-win32.exe -o racket.exe
-start /wait racket.exe /S
+curl -f -L https://mirror.racket-lang.org/releases/6.3/installers/racket-minimal-6.3-src.tgz -o racket-6.3.tgz
+tar xf racket-6.3.tgz
+move racket-6.3 c:\
+pushd c:\racket-6.3\src\worksp
+build.bat
+popd
 
 if /i "%appveyor_repo_tag%"=="false" goto skip_install_x64
 
@@ -198,7 +195,7 @@ nmake -f Make_mvc2.mak CPU=AMD64 ^
 	TCL_VER=86 TCL_VER_LONG=8.6 DYNAMIC_TCL=yes TCL=C:\Tcl ^
 	RUBY=C:\Ruby22-x64 DYNAMIC_RUBY=yes RUBY_VER=22 RUBY_VER_LONG=2.2.0 ^
 	RUBY_MSVCRT_NAME=msvcrt ^
-	"MZSCHEME=C:\Program Files\Racket" DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3m_9z0ds0 ^
+	MZSCHEME=C:\racket-6.3 DYNAMIC_MZSCHEME=yes MZSCHEME_VER=3mxxxxxxx ^
 	WINVER=0x500 ^
 	|| exit 1
 @if /i "%appveyor_repo_tag%"=="false" goto check_executable
