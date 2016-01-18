@@ -186,6 +186,11 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 
+
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpFolder /t REG_EXPAND_SZ /d C:\CrashDumps /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpCount /t REG_DWORD /d 10 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpType /t REG_DWORD /d 2 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v CustomDumpFlags /t REG_DWORD /d 0 /f
 curl -O https://dl.dropboxusercontent.com/s/nnnktcz2ecd6gl8/dbg.zip
 7z x dbg.zip
 set PATH=%PATH%;%CD%\dbg\racket\lib
@@ -194,12 +199,8 @@ pushd dbg\vim\src\testdir
 type ver.txt
 nmake -f Make_dos.mak VIMPROG=..\gvim
 popd
-
-curl -O https://dl.dropboxusercontent.com/s/cxgpk3ovtihj3m5/dbg2.zip
-7z x dbg2.zip
-pushd dbg2\vim\src\testdir
-nmake -f Make_dos.mak VIMPROG=..\gvim
-popd
+dir C:\CrashDumps
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /va /f
 
 :: Remove progress bar from the build log
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
