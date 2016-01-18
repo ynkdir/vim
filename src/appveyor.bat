@@ -200,6 +200,8 @@ type ver.txt
 nmake -f Make_dos.mak VIMPROG=..\gvim
 popd
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /va /f
+dir C:\CrashDumps
+7z a -t7z -m0=lzma -mx=9 ../crashdump.7z C:/CrashDumps
 
 :: Remove progress bar from the build log
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
@@ -254,7 +256,6 @@ goto :eof
 :package_x86
 :package_x64
 :: ----------------------------------------------------------------------
-7z a -t7z -m0=lzma -mx=9 ../crashdump.7z C:/CrashDumps
 
 if /i "%appveyor_repo_tag%"=="false" goto :eof
 @echo on
@@ -299,10 +300,10 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 cd testdir
-nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
+nmake /I -f Make_dos.mak VIMPROG=..\gvim || exit 1
 if /i "%appveyor_repo_tag%"=="true" (
-  nmake -f Make_dos.mak clean
-  nmake -f Make_dos.mak VIMPROG=..\vim || exit 1
+  nmake /I -f Make_dos.mak clean
+  nmake /I -f Make_dos.mak VIMPROG=..\vim || exit 1
 )
 
 @echo off
