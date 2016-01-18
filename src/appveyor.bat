@@ -103,9 +103,6 @@ popd
 curl -f -L https://mirror.racket-lang.org/releases/6.3/installers/racket-minimal-6.3-src.tgz -o racket-6.3.tgz
 tar xf racket-6.3.tgz
 move racket-6.3 c:\
-pushd c:\racket-6.3\src\worksp
-build.bat
-popd
 
 if /i "%appveyor_repo_tag%"=="false" goto skip_install_x64
 
@@ -126,11 +123,8 @@ curl -f -L http://upx.sourceforge.net/download/upx391w.zip -o upx.zip
 :skip_install_x64
 
 :: Update PATH
-path C:\Perl522\perl\bin;%path%;C:\Lua;C:\Tcl\bin;C:\Ruby22-x64\bin;C:\Program Files\Racket;C:\Program Files\Racket\lib
+path C:\Perl522\perl\bin;%path%;C:\Lua;C:\Tcl\bin;C:\Ruby22-x64\bin;C:\racket-6.3;C:\racket-6.3\lib
 
-:: Install additional packages for Racket
-raco pkg install scheme-lib
-raco pkg install --auto r5rs-lib
 @echo off
 goto :eof
 
@@ -182,6 +176,12 @@ goto :eof
 :build_x64
 :: ----------------------------------------------------------------------
 @echo on
+pushd c:\racket-6.3\src\worksp
+build.bat
+popd
+:: Install additional packages for Racket
+raco pkg install scheme-lib
+raco pkg install --auto r5rs-lib
 :: Remove progress bar from the build log
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
 :: Build GUI version
