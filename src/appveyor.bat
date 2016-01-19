@@ -279,7 +279,12 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v 
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v CustomDumpFlags /t REG_DWORD /d 0 /f
 nmake -f Make_dos.mak VIMPROG=..\gvim
 if errorlevel 1 (
-  for %%i in (C:\CrashDumps\*.dmp) do "C:\Program Files (x86)\Windows Kits\8.1\Debuggers\x64\cdb.exe" -z "%%i" -y "SRV*C:\Symbols*http://msdl.microsoft.com/download/symbols;%APPVEYOR_BUILD_FOLDER%\src" -c "!analyze -v; ~*kp; q"
+  for %%i in (C:\CrashDumps\*.dmp) do (
+    "C:\Program Files (x86)\Windows Kits\8.1\Debuggers\x64\cdb.exe" -z "%%i" -y "SRV*C:\Symbols*http://msdl.microsoft.com/download/symbols;%APPVEYOR_BUILD_FOLDER%\src" -c "!analyze -v; ~*kp; q"
+    appveyor PushArtifact "%%i"
+  )
+  appveyor PushArtifact ..\gvim.exe
+  appveyor PushArtifact ..\gvim.pdb
   exit 1
 )
 if /i "%appveyor_repo_tag%"=="true" (
