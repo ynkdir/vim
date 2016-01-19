@@ -75,6 +75,8 @@ goto :eof
 :install_x64
 :: ----------------------------------------------------------------------
 @echo on
+curl -O http://download.microsoft.com/download/B/0/C/B0C80BA3-8AD6-4958-810B-6882485230B5/standalonesdk/sdksetup.exe
+start /wait sdksetup.exe /features + /quiet
 dir "c:\Program\ Files\ (x86)\Windows\ Kits\8.1\Debuggers\x64\"
 dir "c:\Program\ Files\Windows\ Kits\8.1\Debuggers\x64\"
 exit 1
