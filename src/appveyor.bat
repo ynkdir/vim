@@ -273,14 +273,13 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 cd testdir
-where cdb.exe
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpFolder /t REG_EXPAND_SZ /d C:\CrashDumps /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpCount /t REG_DWORD /d 10 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpType /t REG_DWORD /d 2 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v CustomDumpFlags /t REG_DWORD /d 0 /f
 nmake -f Make_dos.mak VIMPROG=..\gvim
 if errorlevel 1 (
-  for %i in (C:\CrashDumps\*.dmp) do "C:\Program Files (x86)\Windows Kits\8.1\Debuggers\x64\cdb.exe" -z "%i" -y "SRV*C:\Symbols*http://msdl.microsoft.com/download/symbols;%APPVEYOR_BUILD_FOLDER%\src" -c "!analyze -v; ~*k; q"
+  for %%i in (C:\CrashDumps\*.dmp) do "C:\Program Files (x86)\Windows Kits\8.1\Debuggers\x64\cdb.exe" -z "%%i" -y "SRV*C:\Symbols*http://msdl.microsoft.com/download/symbols;%APPVEYOR_BUILD_FOLDER%\src" -c "!analyze -v; ~*k; q;"
   exit 1
 )
 if /i "%appveyor_repo_tag%"=="true" (
