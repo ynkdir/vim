@@ -43,10 +43,6 @@ nmake .config.h.time
 xcopy /s .ext\include C:\Ruby22\include\ruby-2.2.0
 popd
 :: Racket
-:: Need a patch to install gvim with dynamic racket
-:: Patch from Yukihiro Nakadaira https://groups.google.com/d/msg/vim_dev/qg7R7HeGq50/XLqqrzZ3BQAJ
-:: curl -f -L "https://groups.google.com/group/vim_dev/attach/57736afaaba5c/if_mzscheme5.diff?part=0.1&authuser=0" -o fix_mzscheme.diff
-:: git apply --check fix_mzscheme.diff && git apply fix_mzscheme.diff || exit 1
 curl -f -L https://mirror.racket-lang.org/releases/6.3/installers/racket-minimal-6.3-i386-win32.exe -o racket.exe
 start /wait racket.exe /S
 
@@ -79,6 +75,9 @@ goto :eof
 :install_x64
 :: ----------------------------------------------------------------------
 @echo on
+dir "c:\Program\ Files\ (x86)\Windows\ Kits\8.1\Debuggers\x64\"
+dir "c:\Program\ Files\Windows\ Kits\8.1\Debuggers\x64\"
+exit 1
 :: Work around for Python 2.7.11
 reg copy HKLM\SOFTWARE\Python\PythonCore\2.7 HKLM\SOFTWARE\Python\PythonCore\2.7-32 /s /reg:64
 :: Lua
@@ -103,10 +102,6 @@ nmake .config.h.time
 xcopy /s .ext\include C:\Ruby22-x64\include\ruby-2.2.0
 popd
 :: Racket
-:: Need a patch to install gvim with dynamic racket
-:: Patch from Yukihiro Nakadaira https://groups.google.com/d/msg/vim_dev/qg7R7HeGq50/XLqqrzZ3BQAJ
-:: curl -f -L "https://groups.google.com/group/vim_dev/attach/57736afaaba5c/if_mzscheme5.diff?part=0.1&authuser=0" -o fix_mzscheme.diff
-:: git apply --check fix_mzscheme.diff && git apply fix_mzscheme.diff || exit 1
 curl -f -L https://mirror.racket-lang.org/releases/6.3/installers/racket-minimal-6.3-x86_64-win32.exe -o racket.exe
 start /wait racket.exe /S
 
@@ -185,25 +180,6 @@ goto :eof
 :build_x64
 :: ----------------------------------------------------------------------
 @echo on
-
-
-if exist C:\CrashDumps rmdir /s /q C:\CrashDumps
-reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpFolder /t REG_EXPAND_SZ /d C:\CrashDumps /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpCount /t REG_DWORD /d 10 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpType /t REG_DWORD /d 2 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v CustomDumpFlags /t REG_DWORD /d 0 /f
-curl -O https://dl.dropboxusercontent.com/s/jyp5uji8kq6vey9/dbg3.zip
-7z x dbg3.zip
-set PATH=%PATH%;%CD%\dbg3\racket\lib
-pushd dbg3\vim\src\testdir
-..\gvim -u NONE -c "redir @a | ver | echo 'has(mzscheme)' has('mzscheme') | 0put a | wq!" ver.txt
-type ver.txt
-nmake -f Make_dos.mak VIMPROG=..\gvim
-popd
-reg delete "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /va /f
-dir C:\CrashDumps
-7z a -t7z -m0=lzma -mx=9 ../crashdump.7z C:/CrashDumps
-
 :: Remove progress bar from the build log
 sed -e "s/\$(LINKARGS2)/\$(LINKARGS2) | sed -e 's#.*\\\\r.*##'/" Make_mvc.mak > Make_mvc2.mak
 :: Build GUI version
@@ -257,7 +233,6 @@ goto :eof
 :package_x86
 :package_x64
 :: ----------------------------------------------------------------------
-
 if /i "%appveyor_repo_tag%"=="false" goto :eof
 @echo on
 
@@ -301,11 +276,11 @@ goto :eof
 :: ----------------------------------------------------------------------
 @echo on
 cd testdir
-rem nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
-rem if /i "%appveyor_repo_tag%"=="true" (
-rem   nmake -f Make_dos.mak clean
-rem   nmake -f Make_dos.mak VIMPROG=..\vim || exit 1
-rem )
+nmake -f Make_dos.mak VIMPROG=..\gvim || exit 1
+if /i "%appveyor_repo_tag%"=="true" (
+  nmake -f Make_dos.mak clean
+  nmake -f Make_dos.mak VIMPROG=..\vim || exit 1
+)
 
 @echo off
 goto :eof

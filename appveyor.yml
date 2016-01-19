@@ -17,7 +17,6 @@ build:
   verbosity: minimal
 
 before_build:
-  - 'ver'
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /%ARCH% /release'
   - src\appveyor.bat install
 
@@ -40,15 +39,13 @@ artifacts:
     name: gVim_x86_installer
   - path: gvim_x64.exe
     name: gVim_x64_installer
-  - path: crashdump.7z
-    name: crashdump
 
 deploy:
   - provider: GitHub
     description: 'Nightly Vim Windows build snapshots'
     auth_token:
       # Update the following key, once this is merged to Vim main repository:
-      secure: 9qLR8RFQr+FuY3Dk7OzO5NBcIqYJYJUas2bXzSVkcbXkWg4cOnzDhCXQPPGKOBhE
+      secure: ZfZRBCokF4rGIlyS0Nmgcn3g30vhz48ZKvIsF4ZGTv5HYVVPvldOtNQt3ZhtVUEl
     artifact: /gVim/
     draft: false
     prerelease: false
